@@ -16,12 +16,16 @@ $string['blocktitle'] = 'Course Information';
 $string['managecourse'] = 'Edit Data';
 $string['downloadcourse'] = 'Download Course';
 
-$string['stableversion'] = 'Stable Version';
+$string['stableversion'] = 'Latest Version';
 $string['demourl'] = 'Course Demo Site';
-$string['timecreated'] = 'Time Created';
+$string['timecreated'] = 'Uploaded on';
 $string['timemodified'] = 'Time Modified';
 $string['averagerating'] = 'Average Ratings';
 
+$string['moodleversion'] = 'Moodle Version';
+$string['dependencies'] = 'Custom Plugin Required';
+
+$string['likes'] = 'Likes';
 $string['nolike'] = 'There is currently no like.';
 $string['likeamount'] = '{$a} people like this course.';
 $string['like'] = 'Like this course';

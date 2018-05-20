@@ -82,6 +82,16 @@ class block_hubcourseinfo extends block_base {
                 $OUTPUT->pix_icon('t/download', get_string('download')) .
                 get_string('downloadcourse', 'block_hubcourseinfo'),
                 array('class' => 'btn btn-default btn-block'));
+
+            $html .= html_writer::start_div();
+            $html .= html_writer::div(get_string('moodleversion', 'block_hubcourseinfo'), 'bold');
+            $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
+            $html .= html_writer::end_div();
+
+            $html .= html_writer::start_div();
+            $html .= html_writer::div(get_string('dependencies', 'block_hubcourseinfo'), 'bold');
+            $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
+            $html .= html_writer::end_div();
         }
 
         $this->content = new stdClass();

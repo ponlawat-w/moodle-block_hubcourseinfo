@@ -30,10 +30,6 @@ function block_hubcourseinfo_renderinfo($hubcourse)
         'timecreated' => array(
             'title' => get_string('timecreated', 'block_hubcourseinfo'),
             'value' => userdate($hubcourse->timecreated)
-        ),
-        'averagerating' => array(
-            'title' => get_string('averagerating', 'block_hubcourseinfo'),
-            'value' => '0.0'
         )
     );
 
@@ -63,7 +59,7 @@ function block_hubcourseinfo_renderlike($hubcourse, $context)
     $likecount = $DB->count_records('block_hubcourse_likes', ['hubcourseid' => $hubcourse->id]);
     $alreadyliked = $DB->count_records('block_hubcourse_likes', ['hubcourseid' => $hubcourse->id, 'userid' => $USER->id]) ? true : false;
 
-    $html = '';
+    $html = html_writer::div(get_string('likes', 'block_hubcourseinfo'), 'bold');
 
     if ($likecount > 0) {
         $html .= get_string('likeamount', 'block_hubcourseinfo', $likecount);
@@ -91,7 +87,12 @@ function block_hubcourseinfo_renderreviews($hubcourse, $context)
 
     $reviews = $DB->get_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id], 'timecreated DESC');
 
-    $html = html_writer::div(get_string('reviews', 'block_hubcourseinfo'), 'bold');
+    $html = html_writer::start_div();
+    $html .= html_writer::div(get_string('averagerating', 'block_hubcourseinfo'), 'bold');
+    $html .= html_writer::div('0.0 <i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>', '', ['style' => 'margin-left: 1em;']);
+    $html .= html_writer::end_div();
+
+    $html .= html_writer::div(get_string('reviews', 'block_hubcourseinfo'), 'bold');
 
     if (count($reviews) == 0) {
         $html .= html_writer::div(get_string('noreview', 'block_hubcourseinfo'), '', ['style' => 'text-align: center;']);

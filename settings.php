@@ -8,7 +8,7 @@ if ($ADMIN->fulltree) {
             'maxfilesize',
             get_string('settings:maxfilesize', 'block_hubcourseinfo'),
             get_string('settings:maxfilesize_description', 'block_hubcourseinfo'),
-            '50', PARAM_INT)
+            '800', PARAM_INT)
     );
 
     $settings->add(
@@ -16,7 +16,7 @@ if ($ADMIN->fulltree) {
             'maxversionamount',
             get_string('settings:maxversionamount', 'block_hubcourseinfo'),
             get_string('settings:maxversionamount_description', 'block_hubcourseinfo'),
-            '10', PARAM_INT)
+            '3', PARAM_INT)
     );
 }
 
