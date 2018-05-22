@@ -27,7 +27,7 @@
             <FIELDS>
                 <FIELD NAME="id" LENGTH="11" SEQUENCE="true" TYPE="int" NOTNULL="true"/>
                 <FIELD NAME="hubcourseid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
-                <FIELD NAME="versionnumber" LENGTH="5" SEQUENCE="false" TYPE="char" NOTNULL="true" DEFAULT=""/>
+                <FIELD NAME="moodleversion" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true" DEFAULT=""/>
                 <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="timeuploaded" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>

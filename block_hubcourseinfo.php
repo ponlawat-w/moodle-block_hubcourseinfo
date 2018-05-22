@@ -64,11 +64,16 @@ class block_hubcourseinfo extends block_base {
             return null;
         }
 
+        $this->page->requires->jquery();
+        $this->page->requires->js('/blocks/hubcourseinfo/script.js');
+        $this->page->requires->strings_for_js(['loading'], 'block_hubcourseinfo');
+
         $html = '';
 
         $html .= block_hubcourseinfo_renderinfo($hubcourse);
         $html .= html_writer::empty_tag('hr');
-        $html .= block_hubcourseinfo_renderlike($hubcourse, $this->context);
+        $html .= html_writer::div(get_string('likes', 'block_hubcourseinfo'), 'bold');
+        $html .= html_writer::div(block_hubcourseinfo_renderlike($hubcourse, $this->context), '', ['id' => 'block-hubcourseinfo-likesection', 'hubcourseid' => $hubcourse->id]);
         $html .= block_hubcourseinfo_renderreviews($hubcourse, $this->context);
         $html .= html_writer::empty_tag('hr');
 

@@ -34,4 +34,6 @@ $string['reviews'] = 'Reviews';
 $string['noreview'] = 'There is currently no review.';
 $string['writereview'] = 'Write a review';
 
+$string['loading'] = 'Loading…';
+
 $string['notknow'] = 'N/A';

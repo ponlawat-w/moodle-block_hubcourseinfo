@@ -1,4 +1,39 @@
 <?php
+function block_hubcourseinfo_getcontextfrominstanceid($instanceid)
+{
+    return context_block::instance($instanceid);
+}
+
+function block_hubcourseinfo_getcontextfromcourseid($courseid)
+{
+    global $DB;
+
+    $coursecontext = context_course::instance($courseid);
+    $instance = $DB->get_record('block_instances', ['blockname' => 'hubcourseinfo', 'parentcontextid' => $coursecontext->id]);
+    if (!$instance) {
+        return false;
+    }
+
+    return context_block::instance($instance->id);
+}
+
+function block_hubcourseinfo_getcontextfromhubcourse($hubcourse)
+{
+    return block_hubcourseinfo_getcontextfromcourseid($hubcourse->courseid);
+}
+
+function block_hubcourseinfo_getcontextfromhubcourseid($hubcourseid)
+{
+    global $DB;
+
+    $hubcourse = $DB->get_record('block_hubcourses', ['id' => $hubcourseid]);
+    if (!$hubcourse) {
+        return false;
+    }
+
+    return block_hubcourseinfo_getcontextfromhubcourse($hubcourse);
+}
+
 function block_hubcourseinfo_renderinfo($hubcourse)
 {
     global $DB;
@@ -17,7 +52,7 @@ function block_hubcourseinfo_renderinfo($hubcourse)
         ),
         'stableversion' => array(
             'title' => get_string('stableversion', 'block_hubcourseinfo'),
-            'value' => $stableversion ? $stableversion->versionnumber : false
+            'value' => $stableversion ? userdate($stableversion->timeuploaded) : false
         ),
         'demourl' => array(
             'title' => get_string('demourl', 'block_hubcourseinfo'),
@@ -59,7 +94,7 @@ function block_hubcourseinfo_renderlike($hubcourse, $context)
     $likecount = $DB->count_records('block_hubcourse_likes', ['hubcourseid' => $hubcourse->id]);
     $alreadyliked = $DB->count_records('block_hubcourse_likes', ['hubcourseid' => $hubcourse->id, 'userid' => $USER->id]) ? true : false;
 
-    $html = html_writer::div(get_string('likes', 'block_hubcourseinfo'), 'bold');
+    $html = '';
 
     if ($likecount > 0) {
         $html .= get_string('likeamount', 'block_hubcourseinfo', $likecount);
@@ -68,9 +103,10 @@ function block_hubcourseinfo_renderlike($hubcourse, $context)
     }
 
     $html .= html_writer::start_div('', ['style' => 'margin-bottom: 10px;']);
-    $html .= html_writer::link(new moodle_url('/'),
-        html_writer::tag('i', '', ['class' => 'fa fa-thumbs-up']) .
-        get_string($alreadyliked ? 'unlike' : 'like', 'block_hubcourseinfo')
+    $html .= html_writer::link('javascript:void(0);',
+        html_writer::tag('i', '', ['class' => $alreadyliked ? 'fa fa-undo' : 'fa fa-thumbs-up']) .
+        ' ' . get_string($alreadyliked ? 'unlike' : 'like', 'block_hubcourseinfo'),
+        ['id' => 'block-hubcourseinfo-like-a']
     );
     $html .= html_writer::end_div();
 
@@ -101,7 +137,7 @@ function block_hubcourseinfo_renderreviews($hubcourse, $context)
     $html .= html_writer::start_div('');
     $html .= html_writer::link(new moodle_url('/'),
         html_writer::tag('i', '', ['class' => 'fa fa-pencil']) .
-        get_string('writereview', 'block_hubcourseinfo'));
+        ' ' . get_string('writereview', 'block_hubcourseinfo'));
     $html .= html_writer::end_div();
 
     return $html;
