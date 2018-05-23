@@ -33,7 +33,21 @@ $string['unlike'] = 'Unlike this course';
 $string['reviews'] = 'Reviews';
 $string['noreview'] = 'There is currently no review.';
 $string['writereview'] = 'Write a review';
+$string['editreview'] = 'Edit review';
+$string['editmyreview'] = 'Edit my review';
+$string['readmorereview'] = 'Read more review';
 
 $string['loading'] = 'Loading…';
 
 $string['notknow'] = 'N/A';
+$string['hubcoursenotfound'] = 'Requested course is not found in hub.';
+
+$string['ratethiscourse'] = 'Rate This Course';
+$string['pleaserate'] = 'Please select';
+$string['comment'] = 'Comment';
+$string['submitreview'] = 'Submit Review';
+
+$string['reviewerr_pleaserate'] = 'Please rate from 1 to 5';
+$string['reviewerr_pleasecomment'] = 'Please write some comment';
+
+$string['err_cannotsubmit'] = 'Cannot submit data, please contact administrator';

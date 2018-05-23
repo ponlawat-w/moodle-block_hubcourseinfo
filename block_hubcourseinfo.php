@@ -53,6 +53,11 @@ class block_hubcourseinfo extends block_base {
         return true;
     }
 
+    public function instance_delete()
+    {
+        return parent::instance_delete();
+    }
+
     public function get_content() {
         global $OUTPUT, $DB;
 
@@ -78,12 +83,12 @@ class block_hubcourseinfo extends block_base {
         $html .= html_writer::empty_tag('hr');
 
         if (has_capability('block/hubcourseinfo:managecourse', $this->context) && $this->page->user_is_editing()) {
-            $html .= html_writer::link(new moodle_url('/block/hubcourseinfo/manage.php', array('course' => $courseid)),
+            $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/manage.php', array('course' => $courseid)),
                 $OUTPUT->pix_icon('i/edit', get_string('edit')) .
                 get_string('managecourse', 'block_hubcourseinfo'),
                 array('class' => 'btn btn-default btn-block'));
         } elseif (has_capability('block/hubcourseinfo:downloadcourse', $this->context)) {
-            $html .= html_writer::link(new moodle_url('/'),
+            $html .= html_writer::link('javascript:void(0);',
                 $OUTPUT->pix_icon('t/download', get_string('download')) .
                 get_string('downloadcourse', 'block_hubcourseinfo'),
                 array('class' => 'btn btn-default btn-block'));

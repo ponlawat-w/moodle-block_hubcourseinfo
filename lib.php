@@ -113,32 +113,120 @@ function block_hubcourseinfo_renderlike($hubcourse, $context)
     return $html;
 }
 
+function block_hubcourseinfo_previewcomment($comment, $length)
+{
+    $comment = strip_tags($comment);
+    return mb_strlen($comment) > $length ? mb_substr($comment, 0, $length) . '…' : $comment;
+}
+
+function block_hubcourseinfo_renderstars($star, $max = 5)
+{
+    $html = '';
+    for ($i = 0; $i < $star; $i++) {
+        $html .= '★';
+    }
+    for ($i = $star; $i < $max; $i++) {
+        $html .= '☆';
+    }
+
+    return $html;
+}
+
 function block_hubcourseinfo_renderreviews($hubcourse, $context)
 {
-    global $DB;
+    global $DB, $USER;
 
     if (!has_capability('block/hubcourseinfo:submitreview', $context)) {
         return '';
     }
 
-    $reviews = $DB->get_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id], 'timecreated DESC');
+    $myreview = $DB->get_record('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id, 'userid' => $USER->id]);
+    $edit = $myreview ? true : false;
+
+    $reviews = $DB->get_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id], 'timecreated DESC', '*', 0, 5);
+
+    $averagedata = $DB->get_record_sql('SELECT AVG(rate) AS averagerating FROM {block_hubcourse_reviews} WHERE hubcourseid = ?', [$hubcourse->id]);
+    $averagerating = round($averagedata->averagerating, 2);
+    $staramount = round($averagerating);
 
     $html = html_writer::start_div();
     $html .= html_writer::div(get_string('averagerating', 'block_hubcourseinfo'), 'bold');
-    $html .= html_writer::div('0.0 <i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>', '', ['style' => 'margin-left: 1em;']);
+    $html .= html_writer::div(block_hubcourseinfo_renderstars($staramount) . ' (' . number_format($averagerating, 2) . ')'
+        , '', ['style' => 'margin-left: 1em;']);
     $html .= html_writer::end_div();
 
     $html .= html_writer::div(get_string('reviews', 'block_hubcourseinfo'), 'bold');
 
     if (count($reviews) == 0) {
         $html .= html_writer::div(get_string('noreview', 'block_hubcourseinfo'), '', ['style' => 'text-align: center;']);
+    } else {
+        foreach ($reviews as $review) {
+            $user = $DB->get_record('user', ['id' => $review->userid]);
+
+            $html .= html_writer::start_div('', ['style' => 'margin: 0  0 10px 0.5em;']);
+            $html .= html_writer::div(block_hubcourseinfo_previewcomment($review->comment, 100));
+            $html .= html_writer::start_div('small', ['style' => 'margin-left: 1em;']);
+            $html .= html_writer::span(fullname($user), 'bold');
+            $html .= ' - ';
+            $html .= html_writer::span(userdate($review->timecreated, get_string('strftimedatefullshort', 'langconfig')));
+            $html .= html_writer::start_tag('br');
+            $html .= html_writer::span(block_hubcourseinfo_renderstars($review->rate));
+            $html .= html_writer::end_div();
+            $html .= html_writer::end_div();
+        }
     }
 
     $html .= html_writer::start_div('');
-    $html .= html_writer::link(new moodle_url('/'),
+    if (count($reviews) > 0) {
+        $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/view.php', ['id' => $hubcourse->id]),
+            html_writer::tag('i', '', ['class' => 'fa fa-caret-down']) .
+            ' ' . get_string('readmorereview', 'block_hubcourseinfo'));
+        $html .= html_writer::start_tag('br');
+    }
+    $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/write.php', ['id' => $hubcourse->id]),
         html_writer::tag('i', '', ['class' => 'fa fa-pencil']) .
-        ' ' . get_string('writereview', 'block_hubcourseinfo'));
+        ' ' . get_string($edit ? 'editmyreview' : 'writereview', 'block_hubcourseinfo'),
+        ['class' => 'btn btn-default btn-block']);
     $html .= html_writer::end_div();
 
     return $html;
+}
+
+function block_hubcourseinfo_updatereview($hubcourseid, $rate, $comment, $commentformat, $versionid = null)
+{
+    global $USER, $DB;
+
+    $userid = $USER->id;
+    $hubcourse = $DB->get_record('block_hubcourses', ['id' => $hubcourseid]);
+    if (!$hubcourse) {
+        return false;
+    }
+
+    if (is_null($versionid)) {
+        $versionid = $hubcourse->stableversion;
+    }
+
+    $review = $DB->get_record('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id, 'userid' => $USER->id]);
+
+    if ($review) {
+        $review->versionid = $versionid;
+        $review->rate = $rate;
+        $review->comment = $comment;
+        $review->commentformat = $commentformat;
+        $review->timecreated = time();
+        $result = $DB->update_record('block_hubcourse_reviews', $review) ? true : false;
+    } else {
+        $review = new stdClass();
+        $review->id = 0;
+        $review->hubcourseid = $hubcourse->id;
+        $review->versionid = $versionid;
+        $review->userid = $userid;
+        $review->rate = $rate;
+        $review->comment = $comment;
+        $review->commentformat = $commentformat;
+        $review->timecreated = time();
+        $result = $DB->insert_record('block_hubcourse_reviews', $review) ? true : false;
+    }
+
+    return $result;
 }
