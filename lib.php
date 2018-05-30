@@ -96,8 +96,10 @@ function block_hubcourseinfo_renderlike($hubcourse, $context)
 
     $html = '';
 
-    if ($likecount > 0) {
-        $html .= get_string('likeamount', 'block_hubcourseinfo', $likecount);
+    if ($likecount == 1) {
+        $html .= get_string('likeamount_singular', 'block_hubcourseinfo', $likecount);
+    } else if ($likecount > 1) {
+        $html .= get_string('likeamount_plural', 'block_hubcourseinfo', $likecount);
     } else {
         $html .= get_string('nolike', 'block_hubcourseinfo');
     }

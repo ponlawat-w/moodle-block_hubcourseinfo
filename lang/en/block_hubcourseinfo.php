@@ -26,16 +26,17 @@ $string['moodleversion'] = 'Moodle Version';
 $string['dependencies'] = 'Custom Plugin Required';
 
 $string['likes'] = 'Likes';
-$string['nolike'] = 'There is currently no like.';
-$string['likeamount'] = '{$a} people like this course.';
+$string['nolike'] = 'Be the first to like this course.';
+$string['likeamount_singular'] = '{$a} person likes this course.';
+$string['likeamount_plural'] = '{$a} people like this course.';
 $string['like'] = 'Like this course';
 $string['unlike'] = 'Unlike this course';
 $string['reviews'] = 'Reviews';
-$string['noreview'] = 'There is currently no review.';
+$string['noreview'] = 'Be the first to review this course.';
 $string['writereview'] = 'Write a review';
 $string['editreview'] = 'Edit review';
 $string['editmyreview'] = 'Edit my review';
-$string['readmorereview'] = 'Read more review';
+$string['readmorereview'] = 'Read more reviews';
 
 $string['loading'] = 'Loading…';
 
