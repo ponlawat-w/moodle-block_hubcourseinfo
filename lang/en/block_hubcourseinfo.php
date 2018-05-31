@@ -6,8 +6,8 @@ $string['hubcourseinfo:submitlike'] = 'Like a course';
 $string['hubcourseinfo:submitreview'] = 'Review course';
 $string['hubcourseinfo:downloadcourse'] = 'Download course file';
 
-$string['settings:maxfilesize'] = 'Maximum course file size (MB)';
-$string['settings:maxfilesize_description'] = 'Maximum course backup size per file in megabytes (MB)';
+$string['settings:autocreateinfoblock'] = 'Create an instance when course is uploaded';
+$string['settings:autocreateinfoblock_decription'] = 'Automatically create an instance when new course is uploaded.';
 $string['settings:maxversionamount'] = 'Maximum version amount';
 $string['settings:maxversionamount_description'] = 'Maximum number of version amount in one course';
 

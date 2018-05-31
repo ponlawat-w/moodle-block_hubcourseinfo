@@ -1,5 +1,13 @@
 <?php
 $capabilities = array(
+    'block/hubcourseinfo:addinstance' => array(
+        'riskbitmask' => 0,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'user' => CAP_ALLOW
+        )
+    ),
     'block/hubcourseinfo:managecourse' => array(
         'riskbitmask' => RISK_XSS | RISK_SPAM | RISK_PERSONAL,
         'captype' => 'write',
