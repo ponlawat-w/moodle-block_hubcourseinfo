@@ -1,4 +1,12 @@
 <?php
+function block_hubcourseinfo_gethubcoursefromcourseid($courseid)
+{
+    global $DB;
+    $hubcourse = $DB->get_record('block_hubcourses', ['courseid' => $courseid]);
+
+    return $hubcourse;
+}
+
 function block_hubcourseinfo_getcontextfrominstanceid($instanceid)
 {
     return context_block::instance($instanceid);
@@ -56,7 +64,7 @@ function block_hubcourseinfo_renderinfo($hubcourse)
         ),
         'demourl' => array(
             'title' => get_string('demourl', 'block_hubcourseinfo'),
-            'value' => $hubcourse->demourl ? html_writer::link($hubcourse->demourl, $hubcourse->demourl) : false
+            'value' => $hubcourse->demourl ? html_writer::link($hubcourse->demourl, mb_substr($hubcourse->demourl, 0, 20) . '…', ['target' => '_blank']) : false
         ),
         'description' => array(
             'title' => get_string('description'),

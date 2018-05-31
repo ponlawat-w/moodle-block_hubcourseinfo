@@ -80,28 +80,33 @@ class block_hubcourseinfo extends block_base {
         $html .= html_writer::div(get_string('likes', 'block_hubcourseinfo'), 'bold');
         $html .= html_writer::div(block_hubcourseinfo_renderlike($hubcourse, $this->context), '', ['id' => 'block-hubcourseinfo-likesection', 'hubcourseid' => $hubcourse->id]);
         $html .= block_hubcourseinfo_renderreviews($hubcourse, $this->context);
-        $html .= html_writer::empty_tag('hr');
 
         if (has_capability('block/hubcourseinfo:managecourse', $this->context) && $this->page->user_is_editing()) {
+            $html .= html_writer::empty_tag('hr');
             $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/manage.php', array('course' => $courseid)),
                 $OUTPUT->pix_icon('i/edit', get_string('edit')) .
                 get_string('managecourse', 'block_hubcourseinfo'),
                 array('class' => 'btn btn-default btn-block'));
         } elseif (has_capability('block/hubcourseinfo:downloadcourse', $this->context)) {
-            $html .= html_writer::link('javascript:void(0);',
-                $OUTPUT->pix_icon('t/download', get_string('download')) .
-                get_string('downloadcourse', 'block_hubcourseinfo'),
-                array('class' => 'btn btn-default btn-block'));
+            $html .= html_writer::empty_tag('hr');
 
-            $html .= html_writer::start_div();
-            $html .= html_writer::div(get_string('moodleversion', 'block_hubcourseinfo'), 'bold');
-            $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
-            $html .= html_writer::end_div();
+            $stableversion = $DB->get_record('block_hubcourse_versions', ['id' => $hubcourse->stableversion]);
+            if ($stableversion) {
+                $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/download.php', ['version' => $stableversion->id]),
+                    $OUTPUT->pix_icon('t/download', get_string('download')) .
+                    get_string('downloadcourse', 'block_hubcourseinfo'),
+                    array('class' => 'btn btn-default btn-block', 'target' => '_blank'));
 
-            $html .= html_writer::start_div();
-            $html .= html_writer::div(get_string('dependencies', 'block_hubcourseinfo'), 'bold');
-            $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
-            $html .= html_writer::end_div();
+                $html .= html_writer::start_div();
+                $html .= html_writer::div(get_string('moodleversion', 'block_hubcourseinfo'), 'bold');
+                $html .= html_writer::div($stableversion->moodleversion, '', ['style' => 'margin-left: 1em;']);
+                $html .= html_writer::end_div();
+
+                $html .= html_writer::start_div();
+                $html .= html_writer::div(get_string('dependencies', 'block_hubcourseinfo'), 'bold');
+                $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
+                $html .= html_writer::end_div();
+            }
         }
 
         $this->content = new stdClass();
