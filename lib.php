@@ -240,3 +240,68 @@ function block_hubcourseinfo_updatereview($hubcourseid, $rate, $comment, $commen
 
     return $result;
 }
+
+function block_hubcourseinfo_deleteversion($versionorid) {
+    global $DB;
+
+    $version = null;
+    if (!is_object($version)) {
+        if (!is_numeric($versionorid)) {
+            return false;
+        }
+
+        $version = $DB->get_record('block_hubcourse_versions', ['id' => $versionorid]);
+        if (!$version) {
+            return false;
+        }
+    } else {
+        $version = $versionorid;
+    }
+
+    $reviews = $DB->get_records('block_hubcourse_reviews', ['versionid' => $version->id]);
+    foreach ($reviews as $review) {
+        $review->versionid = 0;
+        $DB->update_record('block_hubcourse_reviews', $review);
+    }
+
+    $DB->delete_records('block_hubcourse_depedencies', ['versionid' => $version->id]);
+    $DB->delete_records('block_hubcourse_downloads', ['versionid' => $version->id]);
+    $DB->delete_records('block_hubcourse_versions', ['id' => $version->id]);
+
+    return true;
+}
+
+function block_hubcourseinfo_fulldelete($hubcourseorid) {
+    global $DB;
+
+    $hubcourse = null;
+    if (!is_object($hubcourseorid)) {
+        if (!is_numeric($hubcourseorid)) {
+            return false;
+        }
+
+        $hubcourse = $DB->get_record('block_hubcourses', ['id' => $hubcourseorid]);
+        if (!$hubcourse) {
+            return false;
+        }
+    } else {
+        $hubcourse = $hubcourseorid;
+    }
+
+    $fs = get_file_storage();
+    $files = $fs->get_area_files($hubcourse->contextid, 'block_hubcourse', 'course');
+    foreach ($files as $file) {
+        $file->delete();
+    }
+
+    $versions = $DB->get_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id]);
+    foreach ($versions as $version) {
+        block_hubcourseinfo_deleteversion($version);
+    }
+
+    $DB->delete_records('block_hubcourse_likes', ['hubcourseid' => $hubcourse->id]);
+    $DB->delete_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id]);
+    $DB->delete_records('block_hubcourses', ['id' => $hubcourse->id]);
+
+    return true;
+}

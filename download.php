@@ -27,9 +27,14 @@ foreach ($files as $file) {
     if ($ext == 'mbz') {
         header('Content-Type: ' . $file->get_mimetype());
         header('Content-Length: ' . $file->get_filesize());
-        header('Content-Disposition: inline; filename="' . $file->get_filename() . '"');
-        echo $file->get_content(); exit;
+        header('Content-Disposition: attachment; filename="' . $file->get_filename() . '"');
+
+        $fstream = $file->get_content_file_handle();
+        while (!feof($fstream)) {
+            echo fgets($fstream);
+        }
+        fclose($fstream); exit;
     }
 }
 
-throw new Exception(get_string('notknow', 'block_hubcourseinfo'));
+throw new Exception('unexpected');

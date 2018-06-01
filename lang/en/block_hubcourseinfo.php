@@ -1,6 +1,7 @@
 <?php
 $string['pluginname'] = 'Hub Course Info';
 
+$string['hubcourseinfo:addinstance'] = 'Add block instance';
 $string['hubcourseinfo:managecourse'] = 'Manage course meta data and versions';
 $string['hubcourseinfo:submitlike'] = 'Like a course';
 $string['hubcourseinfo:submitreview'] = 'Review course';

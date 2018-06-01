@@ -7,6 +7,7 @@
         <TABLE NAME="block_hubcourses" COMMENT="Hub course instances">
             <FIELDS>
                 <FIELD NAME="id" LENGTH="11" SEQUENCE="true" TYPE="int" NOTNULL="true"/>
+                <FIELD NAME="contextid" SEQUENCE="false" TYPE="int" NOTNULL="true" LENGTH="11"/>
                 <FIELD NAME="courseid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="false" DEFAULT="0"/>
                 <FIELD NAME="stableversion" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
