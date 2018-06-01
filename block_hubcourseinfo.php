@@ -93,6 +93,8 @@ class block_hubcourseinfo extends block_base {
 
             $stableversion = $DB->get_record('block_hubcourse_versions', ['id' => $hubcourse->stableversion]);
             if ($stableversion) {
+                $dependencies = $DB->get_records('block_hubcourse_dependencies', ['versionid' => $stableversion->id], 'requiredpluginname');
+
                 $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/download.php', ['version' => $stableversion->id]),
                     $OUTPUT->pix_icon('t/download', get_string('download')) .
                     get_string('downloadcourse', 'block_hubcourseinfo'),
@@ -105,7 +107,15 @@ class block_hubcourseinfo extends block_base {
 
                 $html .= html_writer::start_div();
                 $html .= html_writer::div(get_string('dependencies', 'block_hubcourseinfo'), 'bold');
-                $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
+                if (count($dependencies) > 0) {
+                    $html .= html_writer::start_tag('ul');
+                    foreach ($dependencies as $dependency) {
+                        $html .= html_writer::tag('li', $dependency->requiredpluginname, ['title' => $dependency->requiredpluginname . ' - ' . $dependency->requiredpluginversion]);
+                    }
+                    $html .= html_writer::end_tag('ul');
+                } else {
+                    $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
+                }
                 $html .= html_writer::end_div();
             }
         }
