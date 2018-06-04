@@ -49,6 +49,12 @@ $string['pleaserate'] = 'Please select';
 $string['comment'] = 'Comment';
 $string['submitreview'] = 'Submit Review';
 
+$string['managehubcourse'] = 'Manage Hub Course';
+$string['metadata'] = 'Metadata';
+$string['editmetadata'] = 'Edit metadata';
+$string['manageversion'] = 'Manage Versions';
+$string['deletehubcourse'] = 'Delete this course';
+
 $string['reviewerr_pleaserate'] = 'Please rate from 1 to 5';
 $string['reviewerr_pleasecomment'] = 'Please write some comment';
 

@@ -84,7 +84,7 @@ class block_hubcourseinfo extends block_base {
 
         if (has_capability('block/hubcourseinfo:managecourse', $this->context) && $this->page->user_is_editing()) {
             $html .= html_writer::empty_tag('hr');
-            $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/manage.php', array('course' => $courseid)),
+            $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/manage.php', array('id' => $hubcourse->id)),
                 $OUTPUT->pix_icon('i/edit', get_string('edit')) .
                 get_string('managecourse', 'block_hubcourseinfo'),
                 array('class' => 'btn btn-default btn-block'));
