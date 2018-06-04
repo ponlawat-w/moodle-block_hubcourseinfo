@@ -68,7 +68,7 @@ function block_hubcourseinfo_renderinfo($hubcourse)
         ),
         'description' => array(
             'title' => get_string('description'),
-            'value' => $hubcourse->description,
+            'value' => nl2br(htmlspecialchars($hubcourse->description)),
         ),
         'timecreated' => array(
             'title' => get_string('timecreated', 'block_hubcourseinfo'),

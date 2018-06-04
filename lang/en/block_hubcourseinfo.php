@@ -14,7 +14,7 @@ $string['settings:maxversionamount_description'] = 'Maximum number of version am
 
 $string['courseowner'] = 'Uploaded by';
 $string['blocktitle'] = 'Course Information';
-$string['managecourse'] = 'Edit Data';
+$string['managecourse'] = 'Edit Course Data';
 $string['downloadcourse'] = 'Download Course';
 
 $string['stableversion'] = 'Latest Version';

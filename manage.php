@@ -27,7 +27,7 @@ $metadatatable->data = [
     [get_string('shortnamecourse'), $course->shortname],
     [get_string('category'), $category ? $category->name : get_string('notknow', 'block_hubcourseinfo')],
     [get_string('demourl', 'block_hubcourseinfo'), $hubcourse->demourl ? html_writer::link($hubcourse->demourl, $hubcourse->demourl, ['target' => '_blank']) : get_string('notknow', 'block_hubcourseinfo')],
-    [get_string('description'), $hubcourse->description ? $hubcourse->description : get_string('notknow', 'block_hubcourseinfo')],
+    [get_string('description'), $hubcourse->description ? nl2br(htmlspecialchars($hubcourse->description)) : get_string('notknow', 'block_hubcourseinfo')],
 ];
 
 $PAGE->set_context($hubcoursecontext);

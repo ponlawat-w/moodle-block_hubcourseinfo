@@ -36,6 +36,8 @@ $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' =
 
 echo $OUTPUT->header();
 
+echo html_writer::tag('p', html_writer::link(new moodle_url('/course/view.php', ['id' => $course->id]), get_string('backto', 'moodle', get_string('course')), ['class' => 'btn btn-default']));
+
 if (!$edit) {
     echo html_writer::tag('p', html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/write.php', ['id' => $hubcourse->id]), get_string($edit ? 'editreview' : 'writereview', 'block_hubcourseinfo')));
 }
