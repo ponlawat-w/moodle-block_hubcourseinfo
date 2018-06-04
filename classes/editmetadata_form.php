@@ -5,8 +5,9 @@ class editmetadata_form extends moodleform
 {
     private $hubcourse;
     private $course;
+    private $new;
 
-    public function __construct($hubcourse)
+    public function __construct($hubcourse, $new = 0)
     {
         global $DB;
 
@@ -16,11 +17,20 @@ class editmetadata_form extends moodleform
             throw new Exception(get_string('hubcoursenotfound', 'block_hubcourseinfo'));
         }
 
+        $this->new = $new;
+
         parent::__construct();
     }
 
     public function definition()
     {
+        global $DB;
+        $categories = $DB->get_records('course_categories', ['visible' => 1]);
+        $categoriesoptions = [];
+        foreach ($categories as $category) {
+            $categoriesoptions[$category->id] = $category->name;
+        }
+
         $form = &$this->_form;
 
         $form->addElement('text', 'fullname', get_string('fullnamecourse'), ['style' => 'width: 100%;']);
@@ -31,6 +41,9 @@ class editmetadata_form extends moodleform
         $form->setDefault('shortname', $this->course->shortname);
         $form->addRule('shortname', get_string('required'), 'required');
 
+        $form->addElement('select', 'category', get_string('category'), $categoriesoptions);
+        $form->setDefault('category', $this->course->category);
+
         $form->addElement('text', 'demourl', get_string('demourl', 'block_hubcourseinfo'), ['style' => 'width: 100%;']);
         $form->setDefault('demourl', $this->hubcourse->demourl);
         $form->setType('demourl', PARAM_URL);
@@ -39,7 +52,8 @@ class editmetadata_form extends moodleform
         $form->setDefault('description', $this->hubcourse->description);
 
         $form->addElement('hidden', 'id', $this->hubcourse->id);
+        $form->addElement('hidden', 'new', $this->new);
 
-        $this->add_action_buttons(true, get_string('save'));
+        $this->add_action_buttons(!$this->new, get_string('save'));
     }
 }

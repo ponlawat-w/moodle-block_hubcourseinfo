@@ -6,7 +6,7 @@ require_once(__DIR__ . '/classes/deleteconfirm_form.php');
 $hubcourseid = required_param('id', PARAM_INT);
 $hubcourse = $DB->get_record('block_hubcourses', ['id' => $hubcourseid]);
 if (!$hubcourse) {
-    throw new Exception(get_string('hubcoursenotfound', 'block_hubocurseinfo'));
+    throw new Exception(get_string('hubcoursenotfound', 'block_hubcourseinfo'));
 }
 
 $hubcoursecontext = block_hubcourseinfo_getcontextfromhubcourse($hubcourse);

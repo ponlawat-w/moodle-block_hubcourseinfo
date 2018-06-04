@@ -82,13 +82,7 @@ class block_hubcourseinfo extends block_base {
         $html .= html_writer::div(block_hubcourseinfo_renderlike($hubcourse, $this->context), '', ['id' => 'block-hubcourseinfo-likesection', 'hubcourseid' => $hubcourse->id]);
         $html .= block_hubcourseinfo_renderreviews($hubcourse, $this->context);
 
-        if (has_capability('block/hubcourseinfo:managecourse', $this->context) && $this->page->user_is_editing()) {
-            $html .= html_writer::empty_tag('hr');
-            $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/manage.php', array('id' => $hubcourse->id)),
-                $OUTPUT->pix_icon('i/edit', get_string('edit')) .
-                get_string('managecourse', 'block_hubcourseinfo'),
-                array('class' => 'btn btn-default btn-block'));
-        } elseif (has_capability('block/hubcourseinfo:downloadcourse', $this->context)) {
+        if (has_capability('block/hubcourseinfo:downloadcourse', $this->context)) {
             $html .= html_writer::empty_tag('hr');
 
             $stableversion = $DB->get_record('block_hubcourse_versions', ['id' => $hubcourse->stableversion]);
@@ -118,6 +112,14 @@ class block_hubcourseinfo extends block_base {
                 }
                 $html .= html_writer::end_div();
             }
+        }
+
+        if (has_capability('block/hubcourseinfo:managecourse', $this->context)) {
+            $html .= html_writer::empty_tag('hr');
+            $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/manage.php', array('id' => $hubcourse->id)),
+                html_writer::tag('i', '', ['class' => 'fa fa-gear']) . ' ' .
+                get_string('managecourse', 'block_hubcourseinfo'),
+                array('class' => 'btn btn-default btn-block'));
         }
 
         $this->content = new stdClass();
