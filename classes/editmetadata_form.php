@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../../lib/formslib.php');
 
-class metadata_edit_form extends moodleform
+class editmetadata_form extends moodleform
 {
     private $hubcourse;
     private $course;
@@ -25,9 +25,11 @@ class metadata_edit_form extends moodleform
 
         $form->addElement('text', 'fullname', get_string('fullnamecourse'), ['style' => 'width: 100%;']);
         $form->setDefault('fullname', $this->course->fullname);
+        $form->addRule('fullname', get_string('required'), 'required');
 
         $form->addElement('text', 'shortname', get_string('shortnamecourse'), ['style' => 'width: 100%;']);
         $form->setDefault('shortname', $this->course->shortname);
+        $form->addRule('shortname', get_string('required'), 'required');
 
         $form->addElement('text', 'demourl', get_string('demourl', 'block_hubcourseinfo'), ['style' => 'width: 100%;']);
         $form->setDefault('demourl', $this->hubcourse->demourl);

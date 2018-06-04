@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../../config.php');
 require_once(__DIR__ . '/../lib.php');
-require_once(__DIR__ . '/../classes/metadata_edit_form.php');
+require_once(__DIR__ . '/../classes/editmetadata_form.php');
 
 $hubcourseid = required_param('id', PARAM_INT);
 $hubcourse = $DB->get_record('block_hubcourses', ['id' => $hubcourseid]);
@@ -20,7 +20,7 @@ if (!$course) {
 require_login($course);
 require_capability('block/hubcourseinfo:managecourse', $hubcoursecontext);
 
-$form = new metadata_edit_form($hubcourse);
+$form = new editmetadata_form($hubcourse);
 
 if ($form->is_cancelled()) {
     redirect(new moodle_url('/blocks/hubcourseinfo/manage.php', ['id' => $hubcourse->id]));
@@ -40,7 +40,7 @@ if ($form->is_submitted()) {
         $hubcourse->timemodified = time();
         $DB->update_record('block_hubcourses', $hubcourse);
 
-        redirect(new moodle_url('/course/view.php', ['id' => $course->id]));
+        redirect(new moodle_url('/blocks/hubcourseinfo/manage.php', ['id' => $hubcourse->id]));
     }
 }
 
