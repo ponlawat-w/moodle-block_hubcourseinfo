@@ -33,6 +33,10 @@ class editmetadata_form extends moodleform
 
         $form = &$this->_form;
 
+        if ($this->new) {
+            $form->addElement('html', html_writer::div(get_string('editmetadatanewcourse', 'block_hubcourseinfo'), 'alert alert-info'));
+        }
+
         $form->addElement('text', 'fullname', get_string('fullnamecourse'), ['style' => 'width: 100%;']);
         $form->setDefault('fullname', $this->course->fullname);
         $form->addRule('fullname', get_string('required'), 'required');
@@ -54,6 +58,6 @@ class editmetadata_form extends moodleform
         $form->addElement('hidden', 'id', $this->hubcourse->id);
         $form->addElement('hidden', 'new', $this->new);
 
-        $this->add_action_buttons(!$this->new, get_string('save'));
+        $this->add_action_buttons(!$this->new, ($this->new) ? get_string('continue') : get_string('save'));
     }
 }

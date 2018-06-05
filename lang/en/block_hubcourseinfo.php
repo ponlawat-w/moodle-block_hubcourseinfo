@@ -55,6 +55,8 @@ $string['editmetadata'] = 'Edit metadata';
 $string['manageversion'] = 'Manage Versions';
 $string['deletehubcourse'] = 'Delete this course';
 
+$string['editmetadatanewcourse'] = '<strong>Congratulations!</strong> Your course has been installed to this site. Please fulfill form below to provide more information about your course.';
+
 $string['deleteconfirm_title'] = '<span class="text-danger">Delete Confirmation</span>';
 $string['deleteconfirm_description'] = 'Are you sure you want to delete this course?<br>Your course files, versions, likes and reviews data will be permanently deleted and cannot be reverted.';
 $string['hubcoursedeleted'] = 'Your course has been deleted.';
