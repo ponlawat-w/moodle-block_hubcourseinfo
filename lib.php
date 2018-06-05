@@ -16,18 +16,17 @@ function block_hubcourseinfo_getcontextfromcourseid($courseid)
 {
     global $DB;
 
-    $coursecontext = context_course::instance($courseid);
-    $instance = $DB->get_record('block_instances', ['blockname' => 'hubcourseinfo', 'parentcontextid' => $coursecontext->id]);
-    if (!$instance) {
+    $hubcourse = $DB->get_record('block_hubcourses', ['courseid' => $courseid]);
+    if (!$hubcourse) {
         return false;
     }
 
-    return context_block::instance($instance->id);
+    return context_block::instance($hubcourse->instanceid);
 }
 
 function block_hubcourseinfo_getcontextfromhubcourse($hubcourse)
 {
-    return block_hubcourseinfo_getcontextfromcourseid($hubcourse->courseid);
+    return block_hubcourseinfo_getcontextfrominstanceid($hubcourse->instanceid);
 }
 
 function block_hubcourseinfo_getcontextfromhubcourseid($hubcourseid)
@@ -40,6 +39,29 @@ function block_hubcourseinfo_getcontextfromhubcourseid($hubcourseid)
     }
 
     return block_hubcourseinfo_getcontextfromhubcourse($hubcourse);
+}
+
+function block_hubcourseinfo_getcontextfromversion($version)
+{
+    return block_hubcourseinfo_getcontextfromhubcourseid($version->hubcourseid);
+}
+
+function block_hubcourseinfo_uploadblockenabled() {
+    return in_array('hubcourseupload', core_plugin_manager::instance()->get_enabled_plugins('block'));
+}
+
+function block_hubcourseinfo_getmaxfilesize() {
+    if (block_hubcourseinfo_uploadblockenabled()) {
+        require_once(__DIR__ . '/../hubcourseupload/lib.php');
+        return block_hubcourseupload_getmaxfilesize();
+    }
+
+    return get_max_upload_file_size();
+}
+
+function block_hubcourseinfo_getbackuppath($filename) {
+    global $CFG;
+    return $CFG->tempdir . '/backup/' . $filename;
 }
 
 function block_hubcourseinfo_renderinfo($hubcourse)
@@ -60,7 +82,7 @@ function block_hubcourseinfo_renderinfo($hubcourse)
         ),
         'stableversion' => array(
             'title' => get_string('stableversion', 'block_hubcourseinfo'),
-            'value' => $stableversion ? userdate($stableversion->timeuploaded) : false
+            'value' => $stableversion ? $stableversion->description : false
         ),
         'demourl' => array(
             'title' => get_string('demourl', 'block_hubcourseinfo'),
@@ -241,11 +263,11 @@ function block_hubcourseinfo_updatereview($hubcourseid, $rate, $comment, $commen
     return $result;
 }
 
-function block_hubcourseinfo_deleteversion($versionorid) {
+function block_hubcourseinfo_deleteversion($versionorid, $contextid) {
     global $DB;
 
     $version = null;
-    if (!is_object($version)) {
+    if (!is_object($versionorid)) {
         if (!is_numeric($versionorid)) {
             return false;
         }
@@ -258,13 +280,19 @@ function block_hubcourseinfo_deleteversion($versionorid) {
         $version = $versionorid;
     }
 
+    $fs = get_file_storage();
+    $files = $fs->get_area_files($contextid, 'block_hubcourse', 'course', $version->id);
+    foreach ($files as $file) {
+        $file->delete();
+    }
+
     $reviews = $DB->get_records('block_hubcourse_reviews', ['versionid' => $version->id]);
     foreach ($reviews as $review) {
         $review->versionid = 0;
         $DB->update_record('block_hubcourse_reviews', $review);
     }
 
-    $DB->delete_records('block_hubcourse_depedencies', ['versionid' => $version->id]);
+    $DB->delete_records('block_hubcourse_dependencies', ['versionid' => $version->id]);
     $DB->delete_records('block_hubcourse_downloads', ['versionid' => $version->id]);
     $DB->delete_records('block_hubcourse_versions', ['id' => $version->id]);
 
@@ -296,7 +324,7 @@ function block_hubcourseinfo_fulldelete($hubcourseorid) {
 
     $versions = $DB->get_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id]);
     foreach ($versions as $version) {
-        block_hubcourseinfo_deleteversion($version);
+        block_hubcourseinfo_deleteversion($version, $hubcourse->contextid);
     }
 
     $DB->delete_records('block_hubcourse_likes', ['hubcourseid' => $hubcourse->id]);
@@ -304,6 +332,42 @@ function block_hubcourseinfo_fulldelete($hubcourseorid) {
     $DB->delete_records('block_hubcourses', ['id' => $hubcourse->id]);
 
     return true;
+}
+
+function block_hubcourseinfo_pluginstodependency($plugins, $versionid) {
+
+    global $DB;
+
+    $standardmods = core_plugin_manager::standard_plugins_list('mod');
+    $standardblocks = core_plugin_manager::standard_plugins_list('block');
+
+    foreach ($plugins['mod'] as $modname => $version) {
+        if (in_array($modname, $standardmods)) {
+            continue;
+        }
+
+        $dependency = new stdClass();
+        $dependency->id = 0;
+        $dependency->versionid = $versionid;
+        $dependency->requiredpluginname = 'mod_' . $modname;
+        $dependency->requiredpluginversion = $version;
+
+        $DB->insert_record('block_hubcourse_dependencies', $dependency);
+    }
+
+    foreach ($plugins['blocks'] as $blockname => $version) {
+        if (in_array($blockname, $standardblocks)) {
+            continue;
+        }
+
+        $dependency = new stdClass();
+        $dependency->id = 0;
+        $dependency->versionid = $versionid;
+        $dependency->requiredpluginname = 'block_' . $blockname;
+        $dependency->requiredpluginversion = $version;
+
+        $DB->insert_record('block_hubcourse_dependencies', $dependency);
+    }
 }
 
 function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archivepath, $plugins) {
@@ -345,39 +409,19 @@ function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archi
         $hubcourse->stableversion = $versionid;
         $DB->update_record('block_hubcourses', $hubcourse);
 
-        $standardmods = core_plugin_manager::standard_plugins_list('mod');
-        $standardblocks = core_plugin_manager::standard_plugins_list('block');
+        block_hubcourseinfo_pluginstodependency($plugins, $versionid);
 
         if (!is_array($plugins)) {
             $plugins = (array)$plugins;
         }
-
-        foreach ($plugins['mod'] as $modname => $version) {
-            if (in_array($modname, $standardmods)) {
-                continue;
-            }
-
-            $dependency = new stdClass();
-            $dependency->id = 0;
-            $dependency->versionid = $versionid;
-            $dependency->requiredpluginname = 'mod_' . $modname;
-            $dependency->requiredpluginversion = $version;
-
-            $DB->insert_record('block_hubcourse_dependencies', $dependency);
-        }
-
-        foreach ($plugins['blocks'] as $blockname => $version) {
-            if (in_array($blockname, $standardblocks)) {
-                continue;
-            }
-
-            $dependency = new stdClass();
-            $dependency->id = 0;
-            $dependency->versionid = $versionid;
-            $dependency->requiredpluginname = 'block_' . $blockname;
-            $dependency->requiredpluginversion = $version;
-
-            $DB->insert_record('block_hubcourse_dependencies', $dependency);
-        }
     }
+
+    return $hubcourse->id;
+}
+
+function block_hubcourseinfo_cancreateversion($hubcourse) {
+    global $DB;
+    $currentversionamount = $DB->count_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id]);
+
+    return $currentversionamount < get_config('block_hubcourseinfo', 'maxversionamount');
 }

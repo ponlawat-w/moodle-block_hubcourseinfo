@@ -17,6 +17,15 @@ $hubcoursecontext = block_hubcourseinfo_getcontextfromhubcourse($hubcourse);
 require_login();
 require_capability('block/hubcourseinfo:downloadcourse', $hubcoursecontext);
 
+if ($version->userid != $USER->id) {
+    $download = new stdClass();
+    $download->id = 0;
+    $download->versionid = $version->id;
+    $download->userid = $USER->id;
+    $download->timedownloaded = time();
+    $DB->insert_record('block_hubcourse_downloads', $download);
+}
+
 $fs = get_file_storage();
 
 $files = $fs->get_area_files($hubcoursecontext->id, 'block_hubcourse', 'course', $versionid);

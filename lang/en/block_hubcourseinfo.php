@@ -57,11 +57,34 @@ $string['deletehubcourse'] = 'Delete this course';
 
 $string['editmetadatanewcourse'] = '<strong>Congratulations!</strong> Your course has been installed to this site. Please fulfill form below to provide more information about your course.';
 
+$string['timeuploaded'] = 'Time Uploaded';
+$string['downloads'] = 'Downloads';
+$string['addversion'] = 'Add a new version';
+$string['editversion'] = 'Edit Course Version';
+$string['current'] = 'Current';
+$string['reset'] = 'Reset content';
+$string['apply'] = 'Apply content';
+
+$string['coursefile'] = 'Course File';
+$string['maxfilesize'] = 'Maximum file size: {$a}MB';
+
+$string['deleteversion'] = 'Delete this version';
+$string['maxversionamountexceed'] = 'You have exceeded maximum version amount at {$a}.';
+
 $string['deleteconfirm_title'] = '<span class="text-danger">Delete Confirmation</span>';
 $string['deleteconfirm_description'] = 'Are you sure you want to delete this course?<br>Your course files, versions, likes and reviews data will be permanently deleted and cannot be reverted.';
 $string['hubcoursedeleted'] = 'Your course has been deleted.';
+
+$string['deleteversionconfirm_title'] = '<span class="text-danger">Version Delete Confirmation</span>';
+$string['deleteversionconfirm_description'] = 'Are tou sure you want to delete this version?<br>Your course file and download data of this version will be permanently deleted and cannot be reverted.';
+$string['versiondeleted'] = 'Your version has been deleted.';
 
 $string['reviewerr_pleaserate'] = 'Please rate from 1 to 5';
 $string['reviewerr_pleasecomment'] = 'Please write some comment';
 
 $string['err_cannotsubmit'] = 'Cannot submit data, please contact administrator';
+
+$string['error_maxversionamountexceed'] = 'You have exceeded maximum version amount and cannot add more version.';
+$string['error_cannotreadfile'] = 'Unable to read file. This might be caused from corrupted file.';
+$string['error_notcoursebackupfile'] = 'Unable to upload file because it is not a course backup file.';
+$string['error_cannotdeletestableversion'] = 'Unable to delete current version';

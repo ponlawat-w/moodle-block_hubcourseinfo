@@ -35,6 +35,7 @@ class block_hubcourseinfo extends block_base {
         if (!$hubcourse) {
             $hubcourse = new stdClass();
             $hubcourse->id = 0;
+            $hubcourse->instanceid = $this->context->instanceid;
             $hubcourse->contextid = $this->context->id;
             $hubcourse->courseid = $courseid;
             $hubcourse->userid = $USER->id;
