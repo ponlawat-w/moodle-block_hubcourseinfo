@@ -305,3 +305,79 @@ function block_hubcourseinfo_fulldelete($hubcourseorid) {
 
     return true;
 }
+
+function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archivepath, $plugins) {
+    global $DB, $USER;
+
+    $guestenrol = $DB->get_record('enrol', ['courseid' => $courseid, 'enrol' => 'guest']);
+    if ($guestenrol) {
+        $guestenrol->status = 0;
+    }
+
+    $hubcourse = block_hubcourseinfo_gethubcoursefromcourseid($courseid);
+
+    if ($hubcourse) {
+
+        $hubcourse->demourl = $info->original_wwwroot . '/course/view.php?id=' . $info->original_course_id;
+
+        $version = new stdClass();
+        $version->id = 0;
+        $version->hubcourseid = $hubcourse->id;
+        $version->moodleversion = $info->moodle_version;
+        $version->description = get_string('initialversion', 'block_hubcourseupload');
+        $version->userid = $USER->id;
+        $version->timeuploaded = time();
+        $version->fileid = 0;
+        $versionid = $DB->insert_record('block_hubcourse_versions', $version);
+
+        $hubcoursecontext = block_hubcourseinfo_getcontextfromhubcourse($hubcourse);
+
+        $fs = get_file_storage();
+        $fs->create_file_from_pathname([
+            'contextid' => $hubcoursecontext->id,
+            'component' => 'block_hubcourse',
+            'filearea' => 'course',
+            'itemid' => $versionid,
+            'filepath' => '/',
+            'filename' => $mbzfilename
+        ], $archivepath);
+
+        $hubcourse->stableversion = $versionid;
+        $DB->update_record('block_hubcourses', $hubcourse);
+
+        $standardmods = core_plugin_manager::standard_plugins_list('mod');
+        $standardblocks = core_plugin_manager::standard_plugins_list('block');
+
+        if (!is_array($plugins)) {
+            $plugins = (array)$plugins;
+        }
+
+        foreach ($plugins['mod'] as $modname => $version) {
+            if (in_array($modname, $standardmods)) {
+                continue;
+            }
+
+            $dependency = new stdClass();
+            $dependency->id = 0;
+            $dependency->versionid = $versionid;
+            $dependency->requiredpluginname = 'mod_' . $modname;
+            $dependency->requiredpluginversion = $version;
+
+            $DB->insert_record('block_hubcourse_dependencies', $dependency);
+        }
+
+        foreach ($plugins['blocks'] as $blockname => $version) {
+            if (in_array($blockname, $standardblocks)) {
+                continue;
+            }
+
+            $dependency = new stdClass();
+            $dependency->id = 0;
+            $dependency->versionid = $versionid;
+            $dependency->requiredpluginname = 'block_' . $blockname;
+            $dependency->requiredpluginversion = $version;
+
+            $DB->insert_record('block_hubcourse_dependencies', $dependency);
+        }
+    }
+}
