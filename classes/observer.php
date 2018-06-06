@@ -13,16 +13,19 @@ class block_hubcourseinfo_observer
             $course = get_course($event->courseid);
             $coursecontext = context_course::instance($course->id);
 
-            $weight = 0;
-            $minweight = $DB->get_record_sql('SELECT MIN(defaultweight) AS value FROM {block_instances} WHERE parentcontextid = ?', [$coursecontext->id]);
-            if ($minweight) {
-                $weight = $minweight->value - 1;
-            }
+            $hubcourse = block_hubcourseinfo_gethubcoursefromcourseid($course->id);
+            if (!$hubcourse) {
+                $weight = 0;
+                $minweight = $DB->get_record_sql('SELECT MIN(defaultweight) AS value FROM {block_instances} WHERE parentcontextid = ?', [$coursecontext->id]);
+                if ($minweight) {
+                    $weight = $minweight->value - 1;
+                }
 
-            $page = new moodle_page();
-            $page->set_context(context_course::instance($course->id));
-            $page->blocks->add_region(BLOCK_POS_LEFT, false);
-            $page->blocks->add_block('hubcourseinfo', BLOCK_POS_LEFT, $weight, false, 'course-view-*');
+                $page = new moodle_page();
+                $page->set_context(context_course::instance($course->id));
+                $page->blocks->add_region(BLOCK_POS_LEFT, false);
+                $page->blocks->add_block('hubcourseinfo', BLOCK_POS_LEFT, $weight, false, 'course-view-*');
+            }
 
             $course->visible = 1;
             $DB->update_record('course', $course);

@@ -425,3 +425,42 @@ function block_hubcourseinfo_cancreateversion($hubcourse) {
 
     return $currentversionamount < get_config('block_hubcourseinfo', 'maxversionamount');
 }
+
+function block_hubcourseinfo_clearcontents($courseorid) {
+    global $DB;
+
+    require_once(__DIR__ . '/../../lib/moodlelib.php');
+    require_once(__DIR__ . '/../../notes/lib.php');
+
+    $course = null;
+    if (is_object($courseorid)) {
+        $course = $courseorid;
+    } else {
+        if (!is_numeric($courseorid)) {
+            return false;
+        }
+
+        $course = $DB->get_record('course', ['id' => $courseorid]);
+        if (!$course) {
+            return false;
+        }
+    }
+
+    $coursecontext = context_course::instance($course->id);
+
+    $modules = $DB->get_records('course_modules', ['course' => $course->id]);
+    foreach ($modules as $module) {
+        course_delete_module($module->id);
+    }
+
+    $blocks = $DB->get_records('block_instances', ['parentcontextid' => $coursecontext->id]);
+    foreach ($blocks as $block) {
+        if ($block->blockname != 'hubcourseinfo') {
+            blocks_delete_instance($block, true);
+        }
+    }
+
+    $DB->delete_records('course_sections', array('course' => $course->id));
+
+    return true;
+}

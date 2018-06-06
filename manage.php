@@ -46,13 +46,17 @@ foreach ($versions as $version) {
     if ($stable) {
         $stabletext = ' ' . html_writer::tag('span', get_string('current', 'block_hubcourseinfo'), ['class' => 'label label-info']);
 
-        $applybutton = html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/apply.php', ['id' => $version->id]),
+        $applybutton = html_writer::link(new moodle_url('/blocks/hubcourseupload/restore.php', ['version' => $version->id]),
             html_writer::tag('i','', ['class' => 'fa fa-refresh']) . ' ' . get_string('reset', 'block_hubcourseinfo'),
-            ['class' => 'btn btn-sm btn-default']);
+            ['class' => 'btn btn-sm btn-default']) . ' ';
     } else {
-        $applybutton = html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/apply.php', ['id' => $version->id]),
+        $applybutton = html_writer::link(new moodle_url('/blocks/hubcourseupload/restore.php', ['version' => $version->id]),
             html_writer::tag('i','', ['class' => 'fa fa-circle']) . ' ' . get_string('apply', 'block_hubcourseinfo'),
-            ['class' => 'btn btn-sm btn-default']);
+            ['class' => 'btn btn-sm btn-default']) . ' ';
+    }
+
+    if (!block_hubcourseinfo_uploadblockenabled()) {
+        $applybutton = '';
     }
 
     $editbutton = html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/edit.php', ['id' => $version->id]),
@@ -66,7 +70,7 @@ foreach ($versions as $version) {
         userdate($version->timeuploaded) . $stabletext,
         $version->description,
         number_format($DB->count_records('block_hubcourse_downloads', ['versionid' => $version->id]), 0),
-        $editbutton . ' ' . $applybutton . ' ' . $downloadbutton
+        $editbutton . ' ' . $applybutton . $downloadbutton
     ];
 }
 

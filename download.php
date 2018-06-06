@@ -17,15 +17,6 @@ $hubcoursecontext = block_hubcourseinfo_getcontextfromhubcourse($hubcourse);
 require_login();
 require_capability('block/hubcourseinfo:downloadcourse', $hubcoursecontext);
 
-if ($version->userid != $USER->id) {
-    $download = new stdClass();
-    $download->id = 0;
-    $download->versionid = $version->id;
-    $download->userid = $USER->id;
-    $download->timedownloaded = time();
-    $DB->insert_record('block_hubcourse_downloads', $download);
-}
-
 $fs = get_file_storage();
 
 $files = $fs->get_area_files($hubcoursecontext->id, 'block_hubcourse', 'course', $versionid);
@@ -34,6 +25,16 @@ foreach ($files as $file) {
     $ext = $exts[count($exts) - 1];
 
     if ($ext == 'mbz') {
+
+        if ($version->userid != $USER->id) {
+            $download = new stdClass();
+            $download->id = 0;
+            $download->versionid = $version->id;
+            $download->userid = $USER->id;
+            $download->timedownloaded = time();
+            $DB->insert_record('block_hubcourse_downloads', $download);
+        }
+
         header('Content-Type: ' . $file->get_mimetype());
         header('Content-Length: ' . $file->get_filesize());
         header('Content-Disposition: attachment; filename="' . $file->get_filename() . '"');
