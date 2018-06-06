@@ -38,6 +38,9 @@ $string['writereview'] = 'Write a review';
 $string['editreview'] = 'Edit review';
 $string['editmyreview'] = 'Edit my review';
 $string['readmorereview'] = 'Read more reviews';
+$string ['downloadotherversions'] = 'Download other versions';
+
+$string['versions'] = 'Versions';
 
 $string['loading'] = 'Loading…';
 

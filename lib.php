@@ -224,6 +224,21 @@ function block_hubcourseinfo_renderreviews($hubcourse, $context)
     return $html;
 }
 
+function block_hubcourseinfo_renderdependencies($dependencies) {
+    $html = '';
+    if (count($dependencies) > 0) {
+        $html .= html_writer::start_tag('ul');
+        foreach ($dependencies as $dependency) {
+            $html .= html_writer::tag('li', $dependency->requiredpluginname, ['title' => $dependency->requiredpluginname . ' - ' . $dependency->requiredpluginversion]);
+        }
+        $html .= html_writer::end_tag('ul');
+    } else {
+        $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
+    }
+
+    return $html;
+}
+
 function block_hubcourseinfo_updatereview($hubcourseid, $rate, $comment, $commentformat, $versionid = null)
 {
     global $USER, $DB;
@@ -370,13 +385,20 @@ function block_hubcourseinfo_pluginstodependency($plugins, $versionid) {
     }
 }
 
-function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archivepath, $plugins) {
-    global $DB, $USER;
+function block_hubcourseinfo_enableguestunrol($courseid) {
+    global $DB;
 
     $guestenrol = $DB->get_record('enrol', ['courseid' => $courseid, 'enrol' => 'guest']);
     if ($guestenrol) {
         $guestenrol->status = 0;
     }
+    return $DB->update_record('enrol', $guestenrol);
+}
+
+function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archivepath, $plugins) {
+    global $DB, $USER;
+
+    block_hubcourseinfo_enableguestunrol($courseid);
 
     $hubcourse = block_hubcourseinfo_gethubcoursefromcourseid($courseid);
 
@@ -410,10 +432,6 @@ function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archi
         $DB->update_record('block_hubcourses', $hubcourse);
 
         block_hubcourseinfo_pluginstodependency($plugins, $versionid);
-
-        if (!is_array($plugins)) {
-            $plugins = (array)$plugins;
-        }
     }
 
     return $hubcourse->id;

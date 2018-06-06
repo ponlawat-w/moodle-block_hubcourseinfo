@@ -102,15 +102,17 @@ class block_hubcourseinfo extends block_base {
 
                 $html .= html_writer::start_div();
                 $html .= html_writer::div(get_string('dependencies', 'block_hubcourseinfo'), 'bold');
-                if (count($dependencies) > 0) {
-                    $html .= html_writer::start_tag('ul');
-                    foreach ($dependencies as $dependency) {
-                        $html .= html_writer::tag('li', $dependency->requiredpluginname, ['title' => $dependency->requiredpluginname . ' - ' . $dependency->requiredpluginversion]);
-                    }
-                    $html .= html_writer::end_tag('ul');
-                } else {
-                    $html .= html_writer::div(get_string('notknow', 'block_hubcourseinfo'), '', ['style' => 'margin-left: 1em;']);
-                }
+                $html .= block_hubcourseinfo_renderdependencies($dependencies);
+                $html .= html_writer::end_div();
+            }
+
+            $versionamount = $DB->count_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id]);
+            if ($versionamount > 0) {
+                $html .= html_writer::start_div('', ['style' => 'text-align: center;']);
+                $html .= html_writer::link(
+                    new moodle_url('/blocks/hubcourseinfo/versionlist.php', ['id' => $hubcourse->id]),
+                    get_string('downloadotherversions', 'block_hubcourseinfo')
+                );
                 $html .= html_writer::end_div();
             }
         }
