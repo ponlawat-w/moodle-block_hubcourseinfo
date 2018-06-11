@@ -404,20 +404,39 @@ function block_hubcourseinfo_pluginstodependency($plugins, $versionid) {
     }
 }
 
-function block_hubcourseinfo_enableguestunrol($courseid) {
+function block_hubcourseinfo_enableguestenrol($courseid) {
     global $DB;
+
+    if (!get_config('block_hubcourseupload', 'autoenableguestenrol')) {
+        return true;
+    }
 
     $guestenrol = $DB->get_record('enrol', ['courseid' => $courseid, 'enrol' => 'guest']);
     if ($guestenrol) {
         $guestenrol->status = 0;
+        return $DB->update_record('enrol', $guestenrol);
+    } else {
+        $maxenrolsort = $DB->get_record_sql('SELECT MAX(sortorder) AS sortorder FROM {enrol} WHERE courseid = ?', [$courseid]);
+        $sortorder = $maxenrolsort && $maxenrolsort->sortorder ? $maxenrolsort->sortorder : 0;
+
+        $guestenrol = new stdClass();
+        $guestenrol->id = 0;
+        $guestenrol->enrol = 'guest';
+        $guestenrol->status = 0;
+        $guestenrol->courseid = $courseid;
+        $guestenrol->sortorder = $sortorder;
+        $guestenrol->password = '';
+
+        return $DB->insert_record('enrol', $guestenrol);
     }
-    return $DB->update_record('enrol', $guestenrol);
+
+    return false;
 }
 
 function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archivepath, $plugins) {
     global $DB, $USER;
 
-    block_hubcourseinfo_enableguestunrol($courseid);
+    block_hubcourseinfo_enableguestenrol($courseid);
 
     $hubcourse = block_hubcourseinfo_gethubcoursefromcourseid($courseid);
 
