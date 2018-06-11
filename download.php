@@ -14,7 +14,6 @@ if (!$hubcourse) {
 
 $hubcoursecontext = block_hubcourseinfo_getcontextfromhubcourse($hubcourse);
 
-require_login();
 require_capability('block/hubcourseinfo:downloadcourse', $hubcoursecontext);
 
 $fs = get_file_storage();

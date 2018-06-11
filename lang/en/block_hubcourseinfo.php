@@ -3,6 +3,8 @@ $string['pluginname'] = 'Hub Course Info';
 
 $string['hubcourseinfo:addinstance'] = 'Add block instance';
 $string['hubcourseinfo:managecourse'] = 'Manage course meta data and versions';
+$string['hubcourseinfo:viewlikes'] = 'View likes';
+$string['hubcourseinfo:viewreviews'] = 'View reviews';
 $string['hubcourseinfo:submitlike'] = 'Like a course';
 $string['hubcourseinfo:submitreview'] = 'Review course';
 $string['hubcourseinfo:downloadcourse'] = 'Download course file';
@@ -28,17 +30,19 @@ $string['dependencies'] = 'Custom Plugin Required';
 
 $string['likes'] = 'Likes';
 $string['nolike'] = 'Be the first to like this course.';
+$string['nolike_guest'] = 'Please sign in to like this course.';
 $string['likeamount_singular'] = '{$a} person likes this course.';
 $string['likeamount_plural'] = '{$a} people like this course.';
 $string['like'] = 'Like this course';
 $string['unlike'] = 'Unlike this course';
 $string['reviews'] = 'Reviews';
 $string['noreview'] = 'Be the first to review this course.';
+$string['noreview_guest'] = 'Please sign in to rate and review this course.';
 $string['writereview'] = 'Write a review';
 $string['editreview'] = 'Edit review';
 $string['editmyreview'] = 'Edit my review';
 $string['readmorereview'] = 'Read more reviews';
-$string ['downloadotherversions'] = 'Download other versions';
+$string['downloadotherversions'] = 'Download other versions';
 
 $string['versions'] = 'Versions';
 
@@ -58,7 +62,7 @@ $string['editmetadata'] = 'Edit metadata';
 $string['manageversion'] = 'Manage Versions';
 $string['deletehubcourse'] = 'Delete this course';
 
-$string['editmetadatanewcourse'] = '<strong>Congratulations!</strong> Your course has been installed to this site. Please fulfill form below to provide more information about your course.';
+$string['editmetadatanewcourse'] = '<strong>Congratulations!</strong> Your course has been installed to this site. Please fill in form below to provide more information about your course.';
 
 $string['timeuploaded'] = 'Time Uploaded';
 $string['downloads'] = 'Downloads';
@@ -71,8 +75,10 @@ $string['apply'] = 'Apply content';
 $string['coursefile'] = 'Course File';
 $string['maxfilesize'] = 'Maximum file size: {$a}MB';
 
+$string['editdelete'] = 'Edit / Delete';
 $string['deleteversion'] = 'Delete this version';
-$string['maxversionamountexceed'] = 'You have exceeded maximum version amount at {$a}.';
+$string['maxversionamountexceed'] = 'You have reached the maximum number of version at {$a}.';
+$string['cannotdeletecurrentversion'] = 'You cannot delete current version of the course.';
 
 $string['deleteconfirm_title'] = '<span class="text-danger">Delete Confirmation</span>';
 $string['deleteconfirm_description'] = 'Are you sure you want to delete this course?<br>Your course files, versions, likes and reviews data will be permanently deleted and cannot be reverted.';
@@ -87,7 +93,7 @@ $string['reviewerr_pleasecomment'] = 'Please write some comment';
 
 $string['err_cannotsubmit'] = 'Cannot submit data, please contact administrator';
 
-$string['error_maxversionamountexceed'] = 'You have exceeded maximum version amount and cannot add more version.';
+$string['error_maxversionamountexceed'] = 'You have reached the maximum number of version amount and cannot add more version.';
 $string['error_cannotreadfile'] = 'Unable to read file. This might be caused from corrupted file.';
 $string['error_notcoursebackupfile'] = 'Unable to upload file because it is not a course backup file.';
 $string['error_cannotdeletestableversion'] = 'Unable to delete current version';

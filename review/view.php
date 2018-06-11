@@ -15,7 +15,8 @@ if (!$course) {
     throw new Exception(get_string('hubcoursenotfound', 'block_hubcourseinfo'));
 }
 
-require_capability('block/hubcourseinfo:submitreview', $blockcontext);
+require_capability('block/hubcourseinfo:viewreviews', $blockcontext);
+$cap_submitreview = has_capability('block/hubcourseinfo:submitreview', $blockcontext);
 
 $reviews = $DB->get_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourseid], 'timecreated ASC');
 $edit = false;
@@ -38,20 +39,21 @@ echo $OUTPUT->header();
 
 echo html_writer::tag('p', html_writer::link(new moodle_url('/course/view.php', ['id' => $course->id]), get_string('backto', 'moodle', get_string('course')), ['class' => 'btn btn-default']));
 
-if (!$edit) {
+if (!$edit && $cap_submitreview) {
     echo html_writer::tag('p', html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/write.php', ['id' => $hubcourse->id]), get_string($edit ? 'editreview' : 'writereview', 'block_hubcourseinfo')));
 }
 
 if (count($reviews) == 0) {
     echo html_writer::div(get_string('noreview', 'block_hubcourseinfo'), 'alert alert-warning');
 } else {
+    $myid = isset($USER) && $USER->id ? $USER->id : 0;
     foreach ($reviews as $review) {
         $user = $DB->get_record('user', ['id' => $review->userid]);
 
         echo html_writer::start_div('', ['style' => 'margin: 20px 0;']);
         echo html_writer::div(block_hubcourseinfo_renderstars($review->rate));
         echo html_writer::div($review->comment);
-        if ($review->userid == $USER->id) {
+        if ($review->userid == $myid) {
             echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/write.php', ['id' => $hubcourse->id]),
                 html_writer::tag('i', '', ['class' => 'fa fa-pencil']) . ' ' . get_string('editmyreview', 'block_hubcourseinfo'),
                 ['class' => 'small']);
@@ -67,7 +69,7 @@ if (count($reviews) == 0) {
     }
 }
 
-if (!$edit && count($reviews) > 0) {
+if ($cap_submitreview && !$edit && count($reviews) > 2) {
     echo html_writer::tag('p', html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/write.php', ['id' => $hubcourse->id]), get_string($edit ? 'editreview' : 'writereview', 'block_hubcourseinfo')));
 }
 

@@ -16,6 +16,7 @@ if (!$course) {
     throw new Exception(get_string('hubcoursenotfound', 'block_hubcourseinfo'));
 }
 
+require_login();
 require_capability('block/hubcourseinfo:submitreview', $blockcontext);
 
 $review = $DB->get_record('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id, 'userid' => $USER->id]);

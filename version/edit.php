@@ -58,8 +58,12 @@ echo $OUTPUT->header();
 
 $form->display();
 
-if ($hubcourse->stableversion != $version->id) {
-    echo html_writer::start_tag('hr');
+echo html_writer::start_tag('hr');
+if ($hubcourse->stableversion == $version->id) {
+    echo html_writer::tag('button', get_string('deleteversion', 'block_hubcourseinfo'), ['class' => 'btn btn-danger', 'disabled' => 'disabled']);
+
+    echo html_writer::div(get_string('cannotdeletecurrentversion', 'block_hubcourseinfo'), 'alert alert-warning', ['style' => 'margin-top: 10px;']);
+} else {
 
     echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/delete.php', ['id' => $version->id]),
         get_string('deleteversion', 'block_hubcourseinfo'), ['class' => 'btn btn-danger']);

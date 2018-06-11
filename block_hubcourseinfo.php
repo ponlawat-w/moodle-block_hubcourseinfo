@@ -79,8 +79,10 @@ class block_hubcourseinfo extends block_base {
 
         $html .= block_hubcourseinfo_renderinfo($hubcourse);
         $html .= html_writer::empty_tag('hr');
-        $html .= html_writer::div(get_string('likes', 'block_hubcourseinfo'), 'bold');
-        $html .= html_writer::div(block_hubcourseinfo_renderlike($hubcourse, $this->context), '', ['id' => 'block-hubcourseinfo-likesection', 'hubcourseid' => $hubcourse->id]);
+        if (has_capability('block/hubcourseinfo:viewlikes', $this->context) || has_capability('block/hubcourseinfo:submitlike', $this->context)) {
+            $html .= html_writer::div(get_string('likes', 'block_hubcourseinfo'), 'bold');
+            $html .= html_writer::div(block_hubcourseinfo_renderlike($hubcourse, $this->context), '', ['id' => 'block-hubcourseinfo-likesection', 'hubcourseid' => $hubcourse->id]);
+        }
         $html .= block_hubcourseinfo_renderreviews($hubcourse, $this->context);
 
         if (has_capability('block/hubcourseinfo:downloadcourse', $this->context)) {

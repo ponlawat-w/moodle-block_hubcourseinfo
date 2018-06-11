@@ -17,6 +17,24 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW
         )
     ),
+    'block/hubcourseinfo:viewlikes' => array(
+        'riskbitmask' => 0,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'guest' => CAP_ALLOW,
+            'user' => CAP_ALLOW
+        )
+    ),
+    'block/hubcourseinfo:viewreviews' => array(
+        'riskbitmask' => 0,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'guest' => CAP_ALLOW,
+            'user' => CAP_ALLOW
+        )
+    ),
     'block/hubcourseinfo:submitlike' => array(
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',

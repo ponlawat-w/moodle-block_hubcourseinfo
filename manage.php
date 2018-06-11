@@ -60,7 +60,7 @@ foreach ($versions as $version) {
     }
 
     $editbutton = html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/edit.php', ['id' => $version->id]),
-        html_writer::tag('i', '', ['class' => 'fa fa-edit']) . ' ' . get_string('edit'),
+        html_writer::tag('i', '', ['class' => 'fa fa-edit']) . ' ' . get_string('editdelete', 'block_hubcourseinfo'),
         ['class' => 'btn btn-sm btn-default']);
     $downloadbutton = html_writer::link(new moodle_url('/blocks/hubcourseinfo/download.php', ['version' => $version->id]),
         html_writer::tag('i', '', ['class' => 'fa fa-download']) . ' ' . get_string('download'),
