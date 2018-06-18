@@ -433,6 +433,18 @@ function block_hubcourseinfo_enableguestenrol($courseid) {
     return false;
 }
 
+function block_hubcourseinfo_clearcontent($hubcourse) {
+    global $DB;
+
+    $versions = $DB->get_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id]);
+    foreach ($versions as $version) {
+        block_hubcourseinfo_deleteversion($version->id, $hubcourse->contextid);
+    }
+
+    $DB->delete_records('block_hubcourse_likes', ['hubcourseid' => $hubcourse->id]);
+    $DB->delete_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id]);
+}
+
 function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archivepath, $plugins) {
     global $DB, $USER;
 
@@ -441,6 +453,8 @@ function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archi
     $hubcourse = block_hubcourseinfo_gethubcoursefromcourseid($courseid);
 
     if ($hubcourse) {
+
+        block_hubcourseinfo_clearcontent($hubcourse);
 
         $hubcourse->demourl = $info->original_wwwroot . '/course/view.php?id=' . $info->original_course_id;
 
@@ -470,9 +484,11 @@ function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archi
         $DB->update_record('block_hubcourses', $hubcourse);
 
         block_hubcourseinfo_pluginstodependency($plugins, $versionid);
-    }
 
-    return $hubcourse->id;
+        return $hubcourse->id;
+    } else {
+        return false;
+    }
 }
 
 function block_hubcourseinfo_cancreateversion($hubcourse) {
