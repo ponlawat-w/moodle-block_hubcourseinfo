@@ -4,7 +4,7 @@ require_once(__DIR__ . '/lib.php');
 class block_hubcourseinfo extends block_base {
     public function init() {
         $this->title = get_string('pluginname', 'block_hubcourseinfo');
-        $this->version = 2018051600;
+        $this->version = 2018062800;
     }
 
     public function has_config() {
@@ -99,7 +99,8 @@ class block_hubcourseinfo extends block_base {
 
                 $html .= html_writer::start_div();
                 $html .= html_writer::div(get_string('moodleversion', 'block_hubcourseinfo'), 'bold');
-                $html .= html_writer::div($stableversion->moodleversion, '', ['style' => 'margin-left: 1em;']);
+                $html .= html_writer::div($stableversion->moodlerelease, '', ['style' => 'margin-left: 1em;']);
+                $html .= html_writer::div($stableversion->moodleversion, '', ['style' => 'margin-left: 1.5em;']);
                 $html .= html_writer::end_div();
 
                 $html .= html_writer::start_div();
@@ -117,6 +118,9 @@ class block_hubcourseinfo extends block_base {
                 );
                 $html .= html_writer::end_div();
             }
+        } else {
+            $html .= html_writer::tag('hr');
+            $html .= get_string('download_guest', 'block_hubcourseinfo');
         }
 
         if (has_capability('block/hubcourseinfo:managecourse', $this->context)) {

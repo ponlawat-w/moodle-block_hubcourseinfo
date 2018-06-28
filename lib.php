@@ -462,6 +462,7 @@ function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archi
         $version->id = 0;
         $version->hubcourseid = $hubcourse->id;
         $version->moodleversion = $info->moodle_version;
+        $version->moodlerelease = $info->moodle_release;
         $version->description = get_string('initialversion', 'block_hubcourseupload');
         $version->userid = $USER->id;
         $version->timeuploaded = time();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/hubcourseinfo/db" VERSION="20180508" COMMENT="XMLDB file for Moodle blocks/hubcourseinfo"
+<XMLDB PATH="blocks/hubcourseinfo/db" VERSION="20180628" COMMENT="XMLDB file for Moodle blocks/hubcourseinfo"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -32,6 +32,7 @@
                 <FIELD NAME="id" LENGTH="11" SEQUENCE="true" TYPE="int" NOTNULL="true"/>
                 <FIELD NAME="hubcourseid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="moodleversion" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
+                <FIELD NAME="moodlerelease" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="200" DEFAULT=""/>
                 <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true" DEFAULT=""/>
                 <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="timeuploaded" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>

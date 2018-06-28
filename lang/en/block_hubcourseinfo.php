@@ -43,6 +43,7 @@ $string['editreview'] = 'Edit review';
 $string['editmyreview'] = 'Edit my review';
 $string['readmorereview'] = 'Read more reviews';
 $string['downloadotherversions'] = 'Download other versions';
+$string['download_guest'] = 'Please sign in to download this course.';
 
 $string['versions'] = 'Versions';
 

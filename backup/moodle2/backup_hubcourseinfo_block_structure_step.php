@@ -9,7 +9,7 @@ class backup_hubcourseinfo_block_structure_step extends backup_block_structure_s
         ));
 
         $versions = new backup_nested_element('block_hubcourse_versions', array('id'), array(
-            'hubcourseid', 'moodleversion', 'description', 'userid', 'timeuploaded', 'fileid'
+            'hubcourseid', 'moodleversion', 'moodlerelease', 'description', 'userid', 'timeuploaded', 'fileid'
         ));
 
         $dependencies = new backup_nested_element('block_hubcourse_dependencies', array('id'), array(

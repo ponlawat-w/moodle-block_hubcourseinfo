@@ -58,6 +58,7 @@ if ($form->is_cancelled()) {
     $version->id = 0;
     $version->hubcourseid = $hubcourse->id;
     $version->moodleversion = $info->moodle_version;
+    $version->moodlerelease = $info->moodle_release;
     $version->description = $data->description;
     $version->userid = $USER->id;
     $version->timeuploaded = time();
