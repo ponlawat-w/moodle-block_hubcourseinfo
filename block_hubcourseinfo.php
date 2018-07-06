@@ -4,7 +4,7 @@ require_once(__DIR__ . '/lib.php');
 class block_hubcourseinfo extends block_base {
     public function init() {
         $this->title = get_string('pluginname', 'block_hubcourseinfo');
-        $this->version = 2018070500;
+        $this->version = 2018070600;
     }
 
     public function has_config() {

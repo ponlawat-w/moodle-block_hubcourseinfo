@@ -30,6 +30,7 @@ $string['deletesubjectconfirm_description'] = 'Are you sure you want to delete t
 
 $string['subject'] = 'Subject';
 $string['tags'] = 'Tags';
+$string['tags_help'] = 'Use comma (,) to separate each tag';
 
 $string['courseowner'] = 'Uploaded by';
 $string['blocktitle'] = 'Course Information';

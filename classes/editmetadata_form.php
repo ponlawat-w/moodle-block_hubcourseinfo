@@ -60,6 +60,7 @@ class editmetadata_form extends moodleform
 
         $form->addElement('text', 'tags', get_string('tags', 'block_hubcourseinfo'), ['style' => 'width: 100%']);
         $form->setDefault('tags', $this->hubcourse->tags);
+        $form->addHelpButton('tags', 'tags', 'block_hubcourseinfo');
 
         $form->addElement('select', 'category', get_string('category'), $categoriesoptions);
         $form->setDefault('category', $this->course->category);

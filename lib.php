@@ -64,17 +64,34 @@ function block_hubcourseinfo_getbackuppath($filename) {
     return $CFG->tempdir . '/backup/' . $filename;
 }
 
+function block_hubcourseinfo_tagstobadges($tags) {
+    $tags = array_map(function ($tag) {
+        return html_writer::span($tag, 'badge badge-default small');
+    }, explode(',', $tags));
+
+    return implode('', $tags);
+}
+
 function block_hubcourseinfo_renderinfo($hubcourse)
 {
     global $DB;
 
     $course = get_course($hubcourse->courseid);
+    $subject = $DB->get_record('block_hubcourse_subjects', ['id' => $hubcourse->subject]);
     $stableversion = $DB->get_record('block_hubcourse_versions', ['id' => $hubcourse->stableversion]);
 
     $data = array(
         'fullnamecourse' => array(
             'title' => get_string('fullnamecourse'),
             'value' => $course->fullname
+        ),
+        'subject' => array(
+            'title' => get_string('subject', 'block_hubcourseinfo'),
+            'value' => $subject ? $subject->name : get_string('notknow', 'block_hubcourseinfo')
+        ),
+        'tags' => array(
+            'title' => get_string('tags', 'block_hubcourseinfo'),
+            'value' => trim($hubcourse->tags) ? block_hubcourseinfo_tagstobadges($hubcourse->tags) : get_string('notknow', 'block_hubcourseinfo')
         ),
         'fullnameuser' => array(
             'title' => get_string('courseowner', 'block_hubcourseinfo'),
