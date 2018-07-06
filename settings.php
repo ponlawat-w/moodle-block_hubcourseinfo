@@ -19,5 +19,16 @@ if ($ADMIN->fulltree) {
             get_string('settings:maxversionamount_description', 'block_hubcourseinfo'),
             '3', PARAM_INT)
     );
+
+    $settings->add(
+        new admin_setting_configempty(
+            'block_hubcourseinfo/subjects',
+            get_string('settings:subjects', 'block_hubcourseinfo'),
+            html_writer::link(
+                new moodle_url('/blocks/hubcourseinfo/admin/subjects.php'),
+                html_writer::tag('i', '', ['class' => 'fa fa-pencil']) . ' ' . get_string('managesubjectslink', 'block_hubcourseinfo'),
+                ['class' => 'text-primary', 'target' => '_blank', 'style' => 'margin-left: 15px;'])
+        )
+    );
 }
 

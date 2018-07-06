@@ -5,7 +5,8 @@ class backup_hubcourseinfo_block_structure_step extends backup_block_structure_s
     protected function define_structure() {
 
         $hubcourses = new backup_nested_element('block_hubcourses', array('id'), array(
-            'instanceid', 'contextid', 'courseid', 'userid', 'stableversion', 'demourl', 'description', 'timecreated', 'timemodified'
+            'instanceid', 'contextid', 'courseid', 'userid', 'stableversion', 'subject', 'tags',
+            'demourl', 'description', 'timecreated', 'timemodified', 'subjectname'
         ));
 
         $versions = new backup_nested_element('block_hubcourse_versions', array('id'), array(
@@ -35,7 +36,12 @@ class backup_hubcourseinfo_block_structure_step extends backup_block_structure_s
         $versions->add_child($dependencies);
         $versions->add_child($downloads);
 
-        $hubcourses->set_source_table('block_hubcourses', ['instanceid' => backup::VAR_BLOCKID]);
+//        $hubcourses->set_source_table('block_hubcourses', ['instanceid' => backup::VAR_BLOCKID]);
+        $hubcourses->set_source_sql('
+            SELECT {block_hubcourses}.*, {block_hubcourse_subjects}.name AS subjectname
+                FROM {block_hubcourses} JOIN {block_hubcourse_subjects} ON {block_hubcourses}.subject = {block_hubcourse_subjects}.name
+                WHERE {block_hubcourses}.instanceid = ?
+        ', [backup::VAR_BLOCKID]);
 
         $versions->set_source_table('block_hubcourse_versions', ['hubcourseid' => backup::VAR_PARENTID]);
         $likes->set_source_table('block_hubcourse_likes', ['hubcourseid' => backup::VAR_PARENTID]);

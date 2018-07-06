@@ -27,6 +27,13 @@ class restore_hubcourseinfo_block_structure_step extends restore_block_instance_
         }
 
         $data = (object)$data;
+
+        $subjectname = $data->subjectname;
+        $subject = $DB->get_record('block_hubcourse_subjects', ['name' => $subjectname]);
+
+        $data->subject = $subject ? $subject->id : 0;
+        unset($data->subjectname);
+
         $oldid = $data->id;
         $data->id = 0;
         $data->instanceid = $blockinstance->id;

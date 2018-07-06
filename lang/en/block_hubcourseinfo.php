@@ -3,6 +3,7 @@ $string['pluginname'] = 'Hub Course Info';
 
 $string['hubcourseinfo:addinstance'] = 'Add block instance';
 $string['hubcourseinfo:managecourse'] = 'Manage course meta data and versions';
+$string['hubcourseinfo:managesubjects'] = 'Manage course subjects';
 $string['hubcourseinfo:viewlikes'] = 'View likes';
 $string['hubcourseinfo:viewreviews'] = 'View reviews';
 $string['hubcourseinfo:submitlike'] = 'Like a course';
@@ -13,6 +14,22 @@ $string['settings:autocreateinfoblock'] = 'Create an instance when course is upl
 $string['settings:autocreateinfoblock_decription'] = 'Automatically create an instance when new course is uploaded.';
 $string['settings:maxversionamount'] = 'Maximum version amount';
 $string['settings:maxversionamount_description'] = 'Maximum number of version amount in one course';
+$string['settings:subjects'] = 'Manage subjects';
+
+$string['managesubjectslink'] = 'Click here to manage course subjects in this site';
+$string['managesubjects'] = 'Manage course subjects';
+$string['coursesubjects'] = 'Course subjects';
+$string['coursesubject'] = 'Course subject';
+$string['newsubject'] = 'Add new subject';
+$string['subjectname'] = 'Subject name';
+$string['editsubject'] = 'Edit course subject: {$a}';
+$string['deletesubjectconfirm'] = 'Delete course subject confirmation';
+
+$string['deletesubjectconfirm_title'] = 'Course subject delete confirmation: {$a}';
+$string['deletesubjectconfirm_description'] = 'Are you sure you want to delete this course subject? The action is cannot be reverted, and all courses in the subject will be moved to non-subject course.';
+
+$string['subject'] = 'Subject';
+$string['tags'] = 'Tags';
 
 $string['courseowner'] = 'Uploaded by';
 $string['blocktitle'] = 'Course Information';

@@ -8,6 +8,14 @@ $capabilities = array(
             'user' => CAP_ALLOW
         )
     ),
+    'block/hubcourseinfo:managesubjects' => array(
+        'riskbitmask' => 0,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'admin' => CAP_ALLOW
+        )
+    ),
     'block/hubcourseinfo:managecourse' => array(
         'riskbitmask' => RISK_XSS | RISK_SPAM | RISK_PERSONAL,
         'captype' => 'write',

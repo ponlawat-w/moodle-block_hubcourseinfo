@@ -38,6 +38,8 @@ if ($form->is_submitted()) {
         $course->category = $data->category;
         $DB->update_record('course', $course);
 
+        $hubcourse->subject = $data->subject;
+        $hubcourse->tags = $data->tags;
         $hubcourse->demourl = $data->demourl;
         $hubcourse->description = $data->description;
         $hubcourse->timemodified = time();

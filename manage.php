@@ -16,15 +16,19 @@ if (!$course) {
     throw new Exception(get_string('hubcoursenotfound', 'block_hubcourseinfo'));
 }
 
-$category = $DB->get_record('course_categories', ['id' => $course->category]);
-
 require_login($course);
 require_capability('block/hubcourseinfo:managecourse', $hubcoursecontext);
+
+$category = $DB->get_record('course_categories', ['id' => $course->category]);
+
+$subject = $DB->get_record('block_hubcourse_subjects', ['id' => $hubcourse->subject]);
 
 $metadatatable = new html_table();
 $metadatatable->data = [
     [get_string('fullnamecourse'), $course->fullname],
     [get_string('shortnamecourse'), $course->shortname],
+    [get_string('subject', 'block_hubcourseinfo'), $subject ? $subject->name : get_string('notknow', 'block_hubcourseinfo')],
+    [get_string('tags', 'block_hubcourseinfo'), trim($hubcourse->tags) ? $hubcourse->tags : get_string('notknow', 'block_hubcourseinfo')],
     [get_string('category'), $category ? $category->name : get_string('notknow', 'block_hubcourseinfo')],
     [get_string('demourl', 'block_hubcourseinfo'), $hubcourse->demourl ? html_writer::link($hubcourse->demourl, $hubcourse->demourl, ['target' => '_blank']) : get_string('notknow', 'block_hubcourseinfo')],
     [get_string('description'), $hubcourse->description ? nl2br(htmlspecialchars($hubcourse->description)) : get_string('notknow', 'block_hubcourseinfo')],

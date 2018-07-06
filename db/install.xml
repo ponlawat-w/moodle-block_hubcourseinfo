@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/hubcourseinfo/db" VERSION="20180628" COMMENT="XMLDB file for Moodle blocks/hubcourseinfo"
+<XMLDB PATH="blocks/hubcourseinfo/db" VERSION="20180705" COMMENT="XMLDB file for Moodle blocks/hubcourseinfo"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -12,6 +12,8 @@
                 <FIELD NAME="courseid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="false" DEFAULT="0"/>
                 <FIELD NAME="stableversion" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
+                <FIELD NAME="subject" SEQUENCE="false" TYPE="int" NOTNULL="true" LENGTH="11" DEFAULT="0"/>
+                <FIELD NAME="tags" SEQUENCE="false" TYPE="char" NOTNULL="false" LENGTH="500" DEFAULT=""/>
                 <FIELD NAME="demourl" LENGTH="500" SEQUENCE="false" TYPE="char" NOTNULL="true"/>
                 <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true" DEFAULT=""/>
                 <FIELD NAME="timecreated" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
@@ -25,6 +27,7 @@
                 <INDEX NAME="contextid_idx" UNIQUE="false" FIELDS="contextid"/>
                 <INDEX NAME="courseid_idx" UNIQUE="false" FIELDS="courseid"/>
                 <INDEX NAME="userid_idx" UNIQUE="false" FIELDS="userid"/>
+                <INDEX NAME="subject_idx" UNIQUE="false" FIELDS="subject"/>
             </INDEXES>
         </TABLE>
         <TABLE NAME="block_hubcourse_versions" COMMENT="Versions of each hub course">
@@ -106,6 +109,15 @@
             <INDEXES>
                 <INDEX NAME="versionid_idx" UNIQUE="false" FIELDS="versionid"/>
             </INDEXES>
+        </TABLE>
+        <TABLE NAME="block_hubcourse_subjects" COMMENT="Subjects of hubcourses">
+            <FIELDS>
+                <FIELD NAME="id" SEQUENCE="true" TYPE="int" NOTNULL="true" LENGTH="11"/>
+                <FIELD NAME="name" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
         </TABLE>
     </TABLES>
 </XMLDB>
