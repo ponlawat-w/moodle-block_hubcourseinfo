@@ -1,19 +1,57 @@
 <?php
-function block_hubcourseinfo_gethubcoursefromcourseid($courseid)
-{
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Function libraries file
+ *
+ * @package block_hubcourseinfo
+ * @copyright 2018 Moodle Association of Japan
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * Get hubcourse object from course ID
+ * @param int $courseid
+ * @return stdClass
+ * @throws dml_exception
+ */
+function block_hubcourseinfo_gethubcoursefromcourseid($courseid) {
     global $DB;
     $hubcourse = $DB->get_record('block_hubcourses', ['courseid' => $courseid]);
 
     return $hubcourse;
 }
 
-function block_hubcourseinfo_getcontextfrominstanceid($instanceid)
-{
+/**
+ * Get block context instance from block instance id
+ * @param int $instanceid
+ * @return context_block
+ */
+function block_hubcourseinfo_getcontextfrominstanceid($instanceid) {
     return context_block::instance($instanceid);
 }
 
-function block_hubcourseinfo_getcontextfromcourseid($courseid)
-{
+/**
+ * Get block context instance from course id
+ *  Return false if course is not found or course is not registered as a hubcourse
+ * @param int $courseid
+ * @return bool|context_block
+ * @throws dml_exception
+ */
+function block_hubcourseinfo_getcontextfromcourseid($courseid) {
     global $DB;
 
     $hubcourse = $DB->get_record('block_hubcourses', ['courseid' => $courseid]);
@@ -24,13 +62,22 @@ function block_hubcourseinfo_getcontextfromcourseid($courseid)
     return context_block::instance($hubcourse->instanceid);
 }
 
-function block_hubcourseinfo_getcontextfromhubcourse($hubcourse)
-{
+/**
+ * Get block context instance from hubcourse object
+ * @param stdClass $hubcourse
+ * @return context_block
+ */
+function block_hubcourseinfo_getcontextfromhubcourse($hubcourse) {
     return block_hubcourseinfo_getcontextfrominstanceid($hubcourse->instanceid);
 }
 
-function block_hubcourseinfo_getcontextfromhubcourseid($hubcourseid)
-{
+/**
+ * Get block context instance from hubcourse ID
+ * @param int $hubcourseid
+ * @return bool|context_block
+ * @throws dml_exception
+ */
+function block_hubcourseinfo_getcontextfromhubcourseid($hubcourseid) {
     global $DB;
 
     $hubcourse = $DB->get_record('block_hubcourses', ['id' => $hubcourseid]);
@@ -41,15 +88,28 @@ function block_hubcourseinfo_getcontextfromhubcourseid($hubcourseid)
     return block_hubcourseinfo_getcontextfromhubcourse($hubcourse);
 }
 
-function block_hubcourseinfo_getcontextfromversion($version)
-{
+/**
+ * Get block context instance from hubcourse version object
+ * @param stdClass $version
+ * @return bool|context_block
+ * @throws dml_exception
+ */
+function block_hubcourseinfo_getcontextfromversion($version) {
     return block_hubcourseinfo_getcontextfromhubcourseid($version->hubcourseid);
 }
 
+/**
+ * Check if block_hubcourseupload is enabled in this site
+ * @return bool
+ */
 function block_hubcourseinfo_uploadblockenabled() {
     return in_array('hubcourseupload', core_plugin_manager::instance()->get_enabled_plugins('block'));
 }
 
+/**
+ * Get maximum file size
+ * @return float|int
+ */
 function block_hubcourseinfo_getmaxfilesize() {
     if (block_hubcourseinfo_uploadblockenabled()) {
         require_once(__DIR__ . '/../hubcourseupload/lib.php');
@@ -59,11 +119,21 @@ function block_hubcourseinfo_getmaxfilesize() {
     return get_max_upload_file_size();
 }
 
+/**
+ * Get backup path
+ * @param string $filename
+ * @return string
+ */
 function block_hubcourseinfo_getbackuppath($filename) {
     global $CFG;
     return $CFG->tempdir . '/backup/' . $filename;
 }
 
+/**
+ * Converting tags (string array) to CSS badges
+ * @param string[] $tags
+ * @return string
+ */
 function block_hubcourseinfo_tagstobadges($tags) {
     $tags = array_map(function ($tag) {
         return html_writer::span($tag, 'badge badge-default small');
@@ -72,8 +142,14 @@ function block_hubcourseinfo_tagstobadges($tags) {
     return implode('', $tags);
 }
 
-function block_hubcourseinfo_renderinfo($hubcourse)
-{
+/**
+ * Fetch rendered hubcourse information for block display
+ * @param stdClass $hubcourse
+ * @return string
+ * @throws coding_exception
+ * @throws dml_exception
+ */
+function block_hubcourseinfo_renderinfo($hubcourse) {
     global $DB;
 
     $course = get_course($hubcourse->courseid);
@@ -130,8 +206,15 @@ function block_hubcourseinfo_renderinfo($hubcourse)
     return $html;
 }
 
-function block_hubcourseinfo_renderlike($hubcourse, $context)
-{
+/**
+ * Fetch rendered hubcourse like data for block display
+ * @param stdClass $hubcourse
+ * @param context_block $context
+ * @return string
+ * @throws coding_exception
+ * @throws dml_exception
+ */
+function block_hubcourseinfo_renderlike($hubcourse, $context) {
     global $DB, $USER;
 
     $cap_viewlike = has_capability('block/hubcourseinfo:viewlikes', $context);
@@ -173,14 +256,25 @@ function block_hubcourseinfo_renderlike($hubcourse, $context)
     return $html;
 }
 
-function block_hubcourseinfo_previewcomment($comment, $length)
-{
+/**
+ * Trim comment string to defined maximum length
+ *  in purpose of preview in block display
+ * @param string $comment
+ * @param int $length
+ * @return string
+ */
+function block_hubcourseinfo_previewcomment($comment, $length) {
     $comment = strip_tags($comment);
     return mb_strlen($comment) > $length ? mb_substr($comment, 0, $length) . '…' : $comment;
 }
 
-function block_hubcourseinfo_renderstars($star, $max = 5)
-{
+/**
+ * Convert rating score to star unicodes
+ * @param int $star
+ * @param int $max
+ * @return string
+ */
+function block_hubcourseinfo_renderstars($star, $max = 5) {
     $html = '';
     for ($i = 0; $i < $star; $i++) {
         $html .= '★';
@@ -192,8 +286,16 @@ function block_hubcourseinfo_renderstars($star, $max = 5)
     return $html;
 }
 
-function block_hubcourseinfo_renderreviews($hubcourse, $context)
-{
+/**
+ * Fetch rendered hubcourse reviews data for block display
+ * @param stdClass $hubcourse
+ * @param context_block $context
+ * @return string
+ * @throws coding_exception
+ * @throws dml_exception
+ * @throws moodle_exception
+ */
+function block_hubcourseinfo_renderreviews($hubcourse, $context) {
     global $DB, $USER;
 
     $cap_viewreviews = has_capability('block/hubcourseinfo:viewreviews', $context);
@@ -260,6 +362,12 @@ function block_hubcourseinfo_renderreviews($hubcourse, $context)
     return $html;
 }
 
+/**
+ * Fetch rendered hubcourse dependencies data for block display
+ * @param stdClass[] $dependencies
+ * @return string
+ * @throws coding_exception
+ */
 function block_hubcourseinfo_renderdependencies($dependencies) {
     $html = '';
     if (count($dependencies) > 0) {
@@ -275,8 +383,17 @@ function block_hubcourseinfo_renderdependencies($dependencies) {
     return $html;
 }
 
-function block_hubcourseinfo_updatereview($hubcourseid, $rate, $comment, $commentformat, $versionid = null)
-{
+/**
+ * Insert or update review data of user's review of a hubcourse
+ * @param int $hubcourseid
+ * @param int $rate
+ * @param string $comment
+ * @param string $commentformat
+ * @param int $versionid
+ * @return bool
+ * @throws dml_exception
+ */
+function block_hubcourseinfo_updatereview($hubcourseid, $rate, $comment, $commentformat, $versionid = null) {
     global $USER, $DB;
 
     $userid = $USER->id;
@@ -314,6 +431,14 @@ function block_hubcourseinfo_updatereview($hubcourseid, $rate, $comment, $commen
     return $result;
 }
 
+/**
+ * Delete and cascade hubcourse version
+ * @param int $versionorid
+ * @param int $contextid
+ * @return bool
+ * @throws coding_exception
+ * @throws dml_exception
+ */
 function block_hubcourseinfo_deleteversion($versionorid, $contextid) {
     global $DB;
 
@@ -350,6 +475,13 @@ function block_hubcourseinfo_deleteversion($versionorid, $contextid) {
     return true;
 }
 
+/**
+ * Fully unregister hubcourse from site
+ * @param int $hubcourseorid
+ * @return bool
+ * @throws coding_exception
+ * @throws dml_exception
+ */
 function block_hubcourseinfo_fulldelete($hubcourseorid) {
     global $DB;
 
@@ -385,6 +517,12 @@ function block_hubcourseinfo_fulldelete($hubcourseorid) {
     return true;
 }
 
+/**
+ * Convert plugins information from backup file to dependencies records
+ * @param array $plugins
+ * @param int $versionid
+ * @throws dml_exception
+ */
 function block_hubcourseinfo_pluginstodependency($plugins, $versionid) {
 
     global $DB;
@@ -421,6 +559,12 @@ function block_hubcourseinfo_pluginstodependency($plugins, $versionid) {
     }
 }
 
+/**
+ * Enable guest enrollment of given course ID, if configured
+ * @param int $courseid
+ * @return bool|int
+ * @throws dml_exception
+ */
 function block_hubcourseinfo_enableguestenrol($courseid) {
     global $DB;
 
@@ -446,10 +590,14 @@ function block_hubcourseinfo_enableguestenrol($courseid) {
 
         return $DB->insert_record('enrol', $guestenrol);
     }
-
-    return false;
 }
 
+/**
+ * Truncate hubcourse data
+ * @param stdClass $hubcourse
+ * @throws coding_exception
+ * @throws dml_exception
+ */
 function block_hubcourseinfo_clearcontent($hubcourse) {
     global $DB;
 
@@ -462,6 +610,19 @@ function block_hubcourseinfo_clearcontent($hubcourse) {
     $DB->delete_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id]);
 }
 
+/**
+ * Action after restoration from block_hubcourseupload
+ * @param int $courseid
+ * @param stdClass $info
+ * @param string $mbzfilename
+ * @param string $archivepath
+ * @param array $plugins
+ * @return bool
+ * @throws coding_exception
+ * @throws dml_exception
+ * @throws file_exception
+ * @throws stored_file_creation_exception
+ */
 function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archivepath, $plugins) {
     global $DB, $USER;
 
@@ -509,6 +670,12 @@ function block_hubcourseinfo_afterrestore($courseid, $info, $mbzfilename, $archi
     }
 }
 
+/**
+ * Check if a version can be created on defined hubcourse (due to configuration in admin settings)
+ * @param stdClass $hubcourse
+ * @return bool
+ * @throws dml_exception
+ */
 function block_hubcourseinfo_cancreateversion($hubcourse) {
     global $DB;
     $currentversionamount = $DB->count_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id]);
@@ -516,6 +683,14 @@ function block_hubcourseinfo_cancreateversion($hubcourse) {
     return $currentversionamount < get_config('block_hubcourseinfo', 'maxversionamount');
 }
 
+/**
+ * Truncate course contents
+ *  This function is used when applying different hubcourse version
+ * @param int $courseorid
+ * @return bool
+ * @throws dml_exception
+ * @throws moodle_exception
+ */
 function block_hubcourseinfo_clearcontents($courseorid) {
     global $DB;
 
