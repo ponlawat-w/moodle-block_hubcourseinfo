@@ -34,6 +34,8 @@ foreach ($files as $file) {
             $DB->insert_record('block_hubcourse_downloads', $download);
         }
 
+        session_write_close();
+
         header('Content-Type: ' . $file->get_mimetype());
         header('Content-Length: ' . $file->get_filesize());
         header('Content-Disposition: attachment; filename="' . $file->get_filename() . '"');
