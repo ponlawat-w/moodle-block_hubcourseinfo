@@ -85,7 +85,7 @@ class version_form extends moodleform {
             $form->addElement('hidden', 'id', $this->versionid);
             $form->setDefault('description', $this->defaultdata->description);
 
-            $this->add_action_buttons(true, get_string('save'));
+            $this->add_action_buttons(true, get_string('save', 'block_hubcourseinfo'));
         } else {
             $form->addElement('hidden', 'id', $this->hubcourseid);
 

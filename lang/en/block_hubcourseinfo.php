@@ -122,6 +122,8 @@ $string['deleteversion'] = 'Delete this version';
 $string['maxversionamountexceed'] = 'You have reached the maximum number of version at {$a}.';
 $string['cannotdeletecurrentversion'] = 'You cannot delete current version of the course.';
 
+$string['save'] = 'Save';
+
 $string['deleteconfirm_title'] = '<span class="text-danger">Delete Confirmation</span>';
 $string['deleteconfirm_description'] = 'Are you sure you want to delete this course?<br>Your course files, versions, likes and reviews data will be permanently deleted and cannot be reverted.';
 $string['hubcoursedeleted'] = 'Your course has been deleted.';

@@ -122,6 +122,8 @@ $string['deleteversion'] = 'このバージョンを削除';
 $string['maxversionamountexceed'] = '最大バージョン数の{$a}になっていますので、新しいバージョンを追加できません。';
 $string['cannotdeletecurrentversion'] = 'コースの現在バージョンを削除できません。';
 
+$string['save'] = '保存';
+
 $string['deleteconfirm_title'] = '<span class="text-danger">削除の確認</span>';
 $string['deleteconfirm_description'] = 'このコースを削除しますか。<br>コースに関わるファイル、バージョン、いいねデータやレビューなどが全て削除されます。';
 $string['hubcoursedeleted'] = 'コースが削除されました。';
