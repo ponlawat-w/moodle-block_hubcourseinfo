@@ -32,6 +32,8 @@ $string['hubcourseinfo:viewreviews'] = 'レビューを読む';
 $string['hubcourseinfo:submitlike'] = '「いいね」をあげる';
 $string['hubcourseinfo:submitreview'] = 'レヴューする';
 $string['hubcourseinfo:downloadcourse'] = 'コースをダウンロードする';
+$string['hubcourseinfo:importfrommajhub'] = 'MAJハブコースからデータをインポート';
+$string['hubcourseinfo:truncate'] = 'ハブコースデータを削除';
 
 $string['settings:autocreateinfoblock'] = '自動作成';
 $string['settings:autocreateinfoblock_decription'] = 'コースをアップロードされた後、情報ブロックを自動的に作成';
@@ -47,9 +49,12 @@ $string['newsubject'] = '追加';
 $string['subjectname'] = 'サブジェクト名';
 $string['editsubject'] = 'サブジェクト編集: {$a}';
 $string['deletesubjectconfirm'] = 'サブジェクトを削除しますか。';
+$string['truncateconfirm'] = 'ハブコースのデータを削除しますか。';
 
 $string['deletesubjectconfirm_title'] = '削除されるサブジェクト: {$a}';
 $string['deletesubjectconfirm_description'] = 'このサブジェクトを削除しますか。削除されたサブジェクトは戻すことができません。このサブジェクトにあるコースはすべて「無サブジェクト」に移動されます。';
+$string['truncateconfirm_title'] = 'データを削除されるハブコース：{$a}';
+$string['truncateconfirm_description'] = 'このハブコースを削除しますか。ただし、削除されるのはハブコースのデータのみで、コースの存在は削除されません。';
 
 $string['subject'] = 'サブジェクト';
 $string['tags'] = 'タグ';
@@ -103,6 +108,7 @@ $string['metadata'] = 'コース情報';
 $string['editmetadata'] = '情報を編集する';
 $string['manageversion'] = 'バージョンを管理する';
 $string['deletehubcourse'] = 'コースを削除する';
+$string['siteadmin'] = 'サイト管理者';
 
 $string['editmetadatanewcourse'] = 'あなたのコースがこのサイトにインストールされました。下記のフォームにコースの情報を入れてください。';
 
@@ -131,6 +137,9 @@ $string['hubcoursedeleted'] = 'コースが削除されました。';
 $string['deleteversionconfirm_title'] = '<span class="text-danger">バージョン削除の確認</span>';
 $string['deleteversionconfirm_description'] = 'このバージョンを削除しますか。<br>バージョンのコースファイルとダウンロード数のデータなどがすべて削除されます。';
 $string['versiondeleted'] = 'バージョンが削除されました。';
+
+$string['importfrommajhub'] = 'MAJハブからデータをインポートする';
+$string['clearhubcoursedata'] = 'ハブコースのデータを削除';
 
 $string['reviewerr_pleaserate'] = '1 から 5 までを評価してください。';
 $string['reviewerr_pleasecomment'] = 'コメントを入力してください。';

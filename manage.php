@@ -116,7 +116,7 @@ echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/metadata/edit.php',
     html_writer::tag('i', '', ['class' => 'fa fa-edit']) . ' ' . get_string('editmetadata', 'block_hubcourseinfo'),
     ['class' => 'btn btn-primary']);
 
-echo html_writer::tag('hr');
+echo html_writer::tag('hr', '');
 
 echo html_writer::tag('h3', get_string('manageversion', 'block_hubcourseinfo'));
 echo html_writer::table($versiontable);
@@ -128,10 +128,30 @@ if (count($versions) < $maxversion) {
 } else {
     echo html_writer::tag('i', get_string('maxversionamountexceed', 'block_hubcourseinfo', $maxversion));
 }
-echo html_writer::tag('hr');
+echo html_writer::tag('hr', '');
 
 echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/delete.php', ['id' => $hubcourse->id]),
     html_writer::tag('i', '', ['class' => 'fa fa-trash']) . ' ' . get_string('deletehubcourse', 'block_hubcourseinfo'),
     ['class' => 'btn btn-danger']);
+
+$cap_importfrommajhub = has_capability('block/hubcourseinfo:importfrommajhub', context_system::instance());
+$cap_truncate = has_capability('block/hubcourseinfo:truncate', context_system::instance());
+if ($cap_importfrommajhub || $cap_truncate) {
+    echo html_writer::tag('hr', '');
+
+    echo html_writer::tag('h3', get_string('siteadmin', 'block_hubcourseinfo'));
+
+    if ($cap_importfrommajhub) {
+        echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/admin/majimport/check.php'),
+            html_writer::tag('i', '', ['class' => 'fa fa-download']) . ' ' . get_string('importfrommajhub', 'block_hubcourseinfo'),
+            ['class' => 'btn btn-primary']);
+        echo ' ';
+    }
+    if ($cap_truncate) {
+        echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/admin/truncate.php', ['id' => $hubcourseid]),
+            html_writer::tag('i', '', ['class' => 'fa fa-trash']) . ' ' . get_string('clearhubcoursedata', 'block_hubcourseinfo'),
+            ['class' => 'btn btn-danger']);
+    }
+}
 
 echo $OUTPUT->footer();

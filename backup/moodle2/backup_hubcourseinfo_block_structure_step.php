@@ -70,7 +70,7 @@ class backup_hubcourseinfo_block_structure_step extends backup_block_structure_s
 //        $hubcourses->set_source_table('block_hubcourses', ['instanceid' => backup::VAR_BLOCKID]);
         $hubcourses->set_source_sql('
             SELECT {block_hubcourses}.*, {block_hubcourse_subjects}.name AS subjectname
-                FROM {block_hubcourses} JOIN {block_hubcourse_subjects} ON {block_hubcourses}.subject = {block_hubcourse_subjects}.name
+                FROM {block_hubcourses} JOIN {block_hubcourse_subjects} ON {block_hubcourses}.subject = {block_hubcourse_subjects}.id
                 WHERE {block_hubcourses}.instanceid = ?
         ', [backup::VAR_BLOCKID]);
 

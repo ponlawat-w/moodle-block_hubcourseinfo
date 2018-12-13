@@ -32,6 +32,8 @@ $string['hubcourseinfo:viewreviews'] = 'View reviews';
 $string['hubcourseinfo:submitlike'] = 'Like a course';
 $string['hubcourseinfo:submitreview'] = 'Review course';
 $string['hubcourseinfo:downloadcourse'] = 'Download course file';
+$string['hubcourseinfo:importfrommajhub'] = 'Import data from MAJ hub';
+$string['hubcourseinfo:truncate'] = 'Truncate hubcourse data (preserve course existence)';
 
 $string['settings:autocreateinfoblock'] = 'Create an instance when course is uploaded';
 $string['settings:autocreateinfoblock_decription'] = 'Automatically create an instance when new course is uploaded.';
@@ -42,14 +44,18 @@ $string['settings:subjects'] = 'Manage subjects';
 $string['managesubjectslink'] = 'Click here to manage course subjects in this site';
 $string['managesubjects'] = 'Manage course subjects';
 $string['coursesubjects'] = 'Course subjects';
+$string['coursesubjects'] = 'Course subjects';
 $string['coursesubject'] = 'Course subject';
 $string['newsubject'] = 'Add new subject';
 $string['subjectname'] = 'Subject name';
 $string['editsubject'] = 'Edit course subject: {$a}';
 $string['deletesubjectconfirm'] = 'Delete course subject confirmation';
+$string['truncateconfirm'] = 'Truncate hubcourse data confirmation';
 
 $string['deletesubjectconfirm_title'] = 'Course subject delete confirmation: {$a}';
 $string['deletesubjectconfirm_description'] = 'Are you sure you want to delete this course subject? The action is cannot be reverted, and all courses in the subject will be moved to non-subject course.';
+$string['truncateconfirm_title'] = 'Hubcourse data truncate confirmation: {$a}';
+$string['truncateconfirm_description'] = 'Are you sure you want to delete this hubcourse data? This action will preserve course existence.';
 
 $string['subject'] = 'Subject';
 $string['tags'] = 'Tags';
@@ -103,6 +109,7 @@ $string['metadata'] = 'Metadata';
 $string['editmetadata'] = 'Edit metadata';
 $string['manageversion'] = 'Manage Versions';
 $string['deletehubcourse'] = 'Delete this course';
+$string['siteadmin'] = 'Site Administrator';
 
 $string['editmetadatanewcourse'] = '<strong>Congratulations!</strong> Your course has been installed to this site. Please fill in form below to provide more information about your course.';
 
@@ -131,6 +138,9 @@ $string['hubcoursedeleted'] = 'Your course has been deleted.';
 $string['deleteversionconfirm_title'] = '<span class="text-danger">Version Delete Confirmation</span>';
 $string['deleteversionconfirm_description'] = 'Are tou sure you want to delete this version?<br>Your course file and download data of this version will be permanently deleted and cannot be reverted.';
 $string['versiondeleted'] = 'Your version has been deleted.';
+
+$string['importfrommajhub'] = 'Import data from MAJ hub';
+$string['clearhubcoursedata'] = 'Truncate hubcourse data';
 
 $string['reviewerr_pleaserate'] = 'Please rate from 1 to 5';
 $string['reviewerr_pleasecomment'] = 'Please write some comment';
