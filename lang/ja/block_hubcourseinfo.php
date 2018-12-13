@@ -50,11 +50,14 @@ $string['subjectname'] = 'サブジェクト名';
 $string['editsubject'] = 'サブジェクト編集: {$a}';
 $string['deletesubjectconfirm'] = 'サブジェクトを削除しますか。';
 $string['truncateconfirm'] = 'ハブコースのデータを削除しますか。';
+$string['majimportconfirm'] = 'MAJハブからインポート';
 
 $string['deletesubjectconfirm_title'] = '削除されるサブジェクト: {$a}';
 $string['deletesubjectconfirm_description'] = 'このサブジェクトを削除しますか。削除されたサブジェクトは戻すことができません。このサブジェクトにあるコースはすべて「無サブジェクト」に移動されます。';
 $string['truncateconfirm_title'] = 'データを削除されるハブコース：{$a}';
 $string['truncateconfirm_description'] = 'このハブコースを削除しますか。ただし、削除されるのはハブコースのデータのみで、コースの存在は削除されません。';
+$string['majimportconfirm_title'] = '「{$a}」コースにMAJハブのデータからインポートしますか？';
+$string['majimportconfirm_description'] = 'MAJハブからデータをインポートしますか？';
 
 $string['subject'] = 'サブジェクト';
 $string['tags'] = 'タグ';
@@ -150,3 +153,4 @@ $string['error_maxversionamountexceed'] = '最大バージョン数になって�
 $string['error_cannotreadfile'] = 'ファイルを読み込めません。';
 $string['error_notcoursebackupfile'] = 'このファイルはコースバックアップファイルではありません。';
 $string['error_cannotdeletestableversion'] = '現在バージョンを削除できません。';
+$string['error_nomajhub'] = 'このコースはMAJハブに存在しません。';

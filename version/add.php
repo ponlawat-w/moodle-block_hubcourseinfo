@@ -93,13 +93,7 @@ if ($form->is_cancelled()) {
     }
 
     if (block_hubcourseinfo_uploadblockenabled()) {
-        $extractedname = restore_controller::get_tempdir_name($hubcourse->courseid, $USER->id);
-        $extractedpath = block_hubcourseinfo_getbackuppath($extractedname);
-        $fb = get_file_packer('application/vnd.moodle.backup');
-        if ($fb->extract_to_pathname($path, $extractedpath)) {
-            $plugins = block_hubcourseupload_getplugins($extractedpath);
-            block_hubcourseinfo_pluginstodependency($plugins, $versionid);
-        }
+        block_hubcourseinfo_savembzdependencies($hubcourse->courseid, $versionid, $path);
     }
 
     if (!$form->save_stored_file('coursefile', $hubcoursecontext->id, 'block_hubcourse', 'course', $versionid, '/')) {

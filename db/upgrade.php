@@ -80,5 +80,13 @@ function xmldb_block_hubcourseinfo_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2018070500, 'hubcourseinfo');
     }
 
+    if ($oldversion < 2018121204) {
+        $table = new xmldb_table('block_hubcourse_versions');
+        $field = new xmldb_field('moodleversion', XMLDB_TYPE_FLOAT, '11', false, true, false, 0, 'hubcourseid');
+        $dbmanager->change_field_type($table, $field);
+
+        upgrade_block_savepoint(true, 2018121204, 'hubcourseinfo');
+    }
+
     return true;
 }

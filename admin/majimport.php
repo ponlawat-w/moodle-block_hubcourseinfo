@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Admin truncate hubcourse data
+ * Admin import from MAJ Hub
  *
- *  Delete all hubcourse data but preserve course existence
+ *  Import course data from moodle-local_majhub
  *
  * @package block_hubcourseinfo
  * @copyright 2018 Moodle Association of Japan
@@ -26,10 +26,14 @@
 
 require_once(__DIR__ . '/../../../config.php');
 require_once(__DIR__ . '/../lib.php');
-require_once(__DIR__ . '/classes/truncateconfirm_form.php');
+require_once(__DIR__ . '/classes/majimportconfirm_form.php');
 
 require_login();
-require_capability('block/hubcourseinfo:truncate', context_system::instance());
+require_capability('block/hubcourseinfo:importfrommajhub', context_system::instance());
+
+if (!block_hubcourseinfo_uploadblockenabled()) {
+    throw new moodle_exception('block_hubcourseupload is required in this site to perform this action.');
+}
 
 $hubcourseid = required_param('id', PARAM_INT);
 
@@ -38,17 +42,18 @@ if (!$hubcourse) {
     throw new moodle_exception('hubcourse not found', 'block_hubcourseinfo');
 }
 
-$confirmform = new truncateconfirm_form($hubcourse);
+$confirmform = new majimportconfirm_form($hubcourse);
 if ($confirmform->is_submitted()) {
+
     if ($confirmform->is_cancelled()) {
         redirect(new moodle_url('/blocks/hubcourseinfo/manage.php', ['id' => $hubcourse->id]));
         exit;
     }
 
-    if (block_hubcourseinfo_fulldelete($hubcourse)) {
-        redirect(new moodle_url('/course/view.php', ['id' => $hubcourse->courseid]));
+    if (block_hubcourseinfo_majimport($hubcourse)) {
+        redirect(new moodle_url('/blocks/hubcourseinfo/manage.php', ['id' => $hubcourse->id]));
     } else {
-        throw new moodle_exception('Cannot truncate hubcourse', 'block_hubcourseinfo');
+        throw new moodle_exception('Cannot import data', 'block_hubcourseinfo');
     }
 }
 
@@ -59,7 +64,7 @@ $PAGE->set_title(get_string('truncateconfirm', 'block_hubcourseinfo'));
 $PAGE->set_heading($PAGE->title);
 $PAGE->navbar->add(get_string('managehubcourse', 'block_hubcourseinfo'),
         new moodle_url('/blocks/hubcourseinfo/manage.php', ['id' => $hubcourse->id]))
-    ->add(get_string('truncateconfirm', 'block_hubcourseinfo'));
+    ->add(get_string('majimportconfirm', 'block_hubcourseinfo'));
 
 echo $OUTPUT->header();
 

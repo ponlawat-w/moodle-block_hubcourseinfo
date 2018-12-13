@@ -134,7 +134,7 @@ echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/delete.php', ['id' 
     html_writer::tag('i', '', ['class' => 'fa fa-trash']) . ' ' . get_string('deletehubcourse', 'block_hubcourseinfo'),
     ['class' => 'btn btn-danger']);
 
-$cap_importfrommajhub = has_capability('block/hubcourseinfo:importfrommajhub', context_system::instance());
+$cap_importfrommajhub = has_capability('block/hubcourseinfo:importfrommajhub', context_system::instance()) && block_hubcourseinfo_uploadblockenabled();
 $cap_truncate = has_capability('block/hubcourseinfo:truncate', context_system::instance());
 if ($cap_importfrommajhub || $cap_truncate) {
     echo html_writer::tag('hr', '');
@@ -142,7 +142,7 @@ if ($cap_importfrommajhub || $cap_truncate) {
     echo html_writer::tag('h3', get_string('siteadmin', 'block_hubcourseinfo'));
 
     if ($cap_importfrommajhub) {
-        echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/admin/majimport/check.php'),
+        echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/admin/majimport.php', ['id' => $hubcourseid]),
             html_writer::tag('i', '', ['class' => 'fa fa-download']) . ' ' . get_string('importfrommajhub', 'block_hubcourseinfo'),
             ['class' => 'btn btn-primary']);
         echo ' ';

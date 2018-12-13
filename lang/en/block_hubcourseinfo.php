@@ -51,11 +51,14 @@ $string['subjectname'] = 'Subject name';
 $string['editsubject'] = 'Edit course subject: {$a}';
 $string['deletesubjectconfirm'] = 'Delete course subject confirmation';
 $string['truncateconfirm'] = 'Truncate hubcourse data confirmation';
+$string['majimportconfirm'] = 'MAJ Hub import confirmation';
 
 $string['deletesubjectconfirm_title'] = 'Course subject delete confirmation: {$a}';
 $string['deletesubjectconfirm_description'] = 'Are you sure you want to delete this course subject? The action is cannot be reverted, and all courses in the subject will be moved to non-subject course.';
 $string['truncateconfirm_title'] = 'Hubcourse data truncate confirmation: {$a}';
 $string['truncateconfirm_description'] = 'Are you sure you want to delete this hubcourse data? This action will preserve course existence.';
+$string['majimportconfirm_title'] = 'MAJ Hub import confirmation: {$a}';
+$string['majimportconfirm_description'] = 'Are you sure you want to import all data from MAJ hub to this hubcourse?';
 
 $string['subject'] = 'Subject';
 $string['tags'] = 'Tags';
@@ -151,3 +154,4 @@ $string['error_maxversionamountexceed'] = 'You have reached the maximum number o
 $string['error_cannotreadfile'] = 'Unable to read file. This might be caused from corrupted file.';
 $string['error_notcoursebackupfile'] = 'Unable to upload file because it is not a course backup file.';
 $string['error_cannotdeletestableversion'] = 'Unable to delete current version';
+$string['error_nomajhub'] = 'This course is not in MAJ hub courseware.';

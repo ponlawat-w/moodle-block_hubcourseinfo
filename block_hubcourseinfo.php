@@ -78,7 +78,11 @@ class block_hubcourseinfo extends block_base {
         }
 
         $hubcourse = $DB->get_record('block_hubcourses', ['courseid' => $courseid]);
-        if (!$hubcourse) {
+        if ($hubcourse) {
+            $hubcourse->instanceid = $this->context->instanceid;
+            $hubcourse->contextid = $this->context->id;
+            $DB->update_record('block_hubcourses', $hubcourse);
+        } else {
             $hubcourse = new stdClass();
             $hubcourse->id = 0;
             $hubcourse->instanceid = $this->context->instanceid;

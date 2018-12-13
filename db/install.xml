@@ -34,7 +34,7 @@
             <FIELDS>
                 <FIELD NAME="id" LENGTH="11" SEQUENCE="true" TYPE="int" NOTNULL="true"/>
                 <FIELD NAME="hubcourseid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
-                <FIELD NAME="moodleversion" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
+                <FIELD NAME="moodleversion" LENGTH="11" SEQUENCE="false" TYPE="float" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="moodlerelease" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="200" DEFAULT=""/>
                 <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true" DEFAULT=""/>
                 <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>

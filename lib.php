@@ -107,6 +107,17 @@ function block_hubcourseinfo_uploadblockenabled() {
 }
 
 /**
+ * Check if majhub_coursewares exists
+ * @return bool
+ * @throws ddl_exception
+ */
+function block_hubcourseinfo_existsmajhubcoursewares() {
+    global $DB;
+    $dbman = $DB->get_manager();
+    return $dbman->table_exists('majhub_coursewares');
+}
+
+/**
  * Get maximum file size
  * @return float|int
  */
@@ -560,6 +571,27 @@ function block_hubcourseinfo_pluginstodependency($plugins, $versionid) {
 }
 
 /**
+ * Save unextracted mbz to dependencies table
+ * @param int $courseid
+ * @param int $versionid
+ * @param string $filepath
+ * @throws dml_exception
+ * @return bool
+ */
+function block_hubcourseinfo_savembzdependencies($courseid, $versionid, $filepath) {
+    global $USER;
+    $extractedname = restore_controller::get_tempdir_name($courseid, $USER->id);
+    $extractedpath = block_hubcourseinfo_getbackuppath($extractedname);
+    $fb = get_file_packer('application/vnd.moodle.backup');
+    if ($fb->extract_to_pathname($filepath, $extractedpath)) {
+        $plugins = block_hubcourseupload_getplugins($extractedpath);
+        block_hubcourseinfo_pluginstodependency($plugins, $versionid);
+    }
+
+    return true;
+}
+
+/**
  * Enable guest enrollment of given course ID, if configured
  * @param int $courseid
  * @return bool|int
@@ -726,6 +758,179 @@ function block_hubcourseinfo_clearcontents($courseorid) {
     }
 
     $DB->delete_records('course_sections', array('course' => $course->id));
+
+    return true;
+}
+
+/**
+ * @param stdClass $hubcourse
+ * @return bool
+ * @throws backup_helper_exception
+ * @throws coding_exception
+ * @throws ddl_exception
+ * @throws dml_exception
+ * @throws file_exception
+ * @throws moodle_exception
+ * @throws stored_file_creation_exception
+ */
+function block_hubcourseinfo_majimport($hubcourse) {
+    global $DB;
+
+    if (!block_hubcourseinfo_existsmajhubcoursewares()) {
+        throw new moodle_exception('Table majhub_coursewares does not exist');
+    }
+
+    $courseware = $DB->get_record('majhub_coursewares', ['courseid' => $hubcourse->courseid]);
+    if (!$courseware) {
+        throw new moodle_exception(get_string('error_nomajhub', 'block_hubcourseinfo'));
+    }
+
+    $lastversionid = block_hubcourseinfo_majimport_versions($hubcourse, $courseware);
+    if (!$lastversionid) {
+        throw new moodle_exception('Cannot import hubcourse versions');
+    }
+
+    if (!block_hubcourseinfo_majimport_reviews($hubcourse, $courseware, $lastversionid)) {
+        throw new moodle_exception('Cannot import reviews');
+    }
+
+    if (!block_hubcourseinfo_majimport_downloads($hubcourse, $courseware, $lastversionid)) {
+        throw new moodle_exception('Cannot import downloads');
+    }
+
+    $hubcourse->userid = $courseware->userid;
+    $hubcourse->stableversion = $lastversionid;
+    $hubcourse->demourl = $courseware->demourl;
+    $hubcourse->timecreated = $courseware->timecreated;
+    $hubcourse->timemodified = $courseware->timemodified;
+    return $DB->update_record('block_hubcourses', $hubcourse) ? true : false;
+}
+
+/**
+ * Import courseware version to hubcourse version
+ * @param stdClass $hubcourse
+ * @param stdClass $courseware
+ * @return bool|int
+ * @throws backup_helper_exception
+ * @throws dml_exception
+ * @throws file_exception
+ * @throws moodle_exception
+ * @throws stored_file_creation_exception
+ */
+function block_hubcourseinfo_majimport_versions($hubcourse, $courseware) {
+    global $DB, $CFG;
+    require_once(__DIR__ . '/../../backup/util/includes/restore_includes.php');
+    require_once(__DIR__ . '/../hubcourseupload/lib.php');
+
+    $fs = new file_storage();
+    $coursewareversions = $DB->get_records('majhub_courseware_versions', ['coursewareid' => $courseware->id],
+        'timecreated DESC', '*', 0, get_config('block_hubcourseinfo', 'maxversionamount') - 1);
+    $lastid = 0;
+
+    $stable_cversion = new stdClass();
+    $stable_cversion->id = 0;
+    $stable_cversion->fileid = $courseware->fileid;
+    $stable_cversion->description = '-';
+    $stable_cversion->timecreated = $courseware->timecreated;
+    $coursewareversions[] = $stable_cversion;
+
+    foreach ($coursewareversions as $cversion) {
+        $cfile = $fs->get_file_by_id($cversion->fileid);
+        if (!$cfile) {
+            throw new moodle_exception("File in MAJ courseware #{$cversion->id} not found");
+        }
+        $f = $cfile->get_content_file_handle();
+        $filemeta = stream_get_meta_data($f);
+        $filepath = $filemeta['uri'];
+        fclose($f);
+
+        if (!file_exists($filepath)) {
+            throw new moodle_exception('File not found');
+        }
+
+        $info = backup_general_helper::get_backup_information_from_mbz($filepath);
+        if (!$info) {
+            throw new moodle_exception('Cannot read mbz file');
+        }
+
+        $version = new stdClass();
+        $version->id = 0;
+        $version->hubcourseid = $hubcourse->id;
+        $version->moodleversion = $info->moodle_version;
+        $version->moodlerelease = $info->moodle_release;
+        $version->description = $cversion->description;
+        $version->userid = $courseware->userid;
+        $version->timeuploaded = $cversion->timecreated;
+        $version->fileid = 0;
+        $id = $DB->insert_record('block_hubcourse_versions', $version);
+        if (!$id) {
+            unlink($filepath);
+            return false;
+        }
+
+        $hfile = $fs->create_file_from_storedfile([
+            'contextid' => $hubcourse->contextid,
+            'component' => 'block_hubcourse',
+            'filearea' => 'course',
+            'itemid' => $id,
+            'filepath' => '/',
+            'filename' => $cfile->get_filename()
+        ], $cfile);
+        if (!$hfile) {
+            throw new moodle_exception('Cannot save file');
+        }
+
+        $version = new stdClass();
+        $version->id = $id;
+        $version->fileid = $hfile->get_id();
+        if (!$DB->update_record('block_hubcourse_versions', $version)) {
+            throw new moodle_exception('Cannot save file id to new version');
+        }
+
+        block_hubcourseinfo_savembzdependencies($hubcourse->courseid, $id, $filepath);
+
+        $lastid = $id;
+    }
+
+    return $lastid;
+}
+
+function block_hubcourseinfo_majimport_reviews($hubcourse, $courseware, $hubcourseversionid) {
+    global $DB;
+    $coursewarereviews = $DB->get_records('majhub_courseware_reviews', ['siteid' => $courseware->siteid, 'sitecourseid' => $courseware->sitecourseid]);
+    foreach ($coursewarereviews as $creview) {
+        $review = new stdClass();
+        $review->id = 0;
+        $review->hubcourseid = $hubcourse->id;
+        $review->versionid = $hubcourseversionid;
+        $review->userid = $creview->userid;
+        $review->rate = round($creview->rating / 2);
+        $review->comment = $creview->comment;
+        $review->commentformat = FORMAT_HTML;
+        $review->timecreated = $creview->timecreated;
+
+        if (!$DB->insert_record('block_hubcourse_reviews', $review)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function block_hubcourseinfo_majimport_downloads($hubcourse, $courseware, $hubcourseversionid) {
+    global $DB;
+    $coursewaredownloads = $DB->get_records('majhub_courseware_downloads', ['siteid' => $courseware->siteid, 'sitecourseid' => $courseware->sitecourseid]);
+    foreach ($coursewaredownloads as $cdownload) {
+        $download = new stdClass();
+        $download->id = 0;
+        $download->versionid = $hubcourseversionid;
+        $download->userid = $cdownload->userid;
+        $download->timedownloaded = $cdownload->timecreated;
+
+        if (!$DB->insert_record('block_hubcourse_downloads', $download)) {
+            return false;
+        }
+    }
 
     return true;
 }
