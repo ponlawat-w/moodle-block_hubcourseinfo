@@ -800,7 +800,7 @@ function block_hubcourseinfo_majimport($hubcourse) {
 
     $hubcourse->userid = $courseware->userid;
     $hubcourse->stableversion = $lastversionid;
-    $hubcourse->demourl = $courseware->demourl;
+    $hubcourse->demourl = $courseware->demourl ? $courseware->demourl : '';
     $hubcourse->timecreated = $courseware->timecreated;
     $hubcourse->timemodified = $courseware->timemodified;
     return $DB->update_record('block_hubcourses', $hubcourse) ? true : false;
@@ -810,6 +810,7 @@ function block_hubcourseinfo_majimport($hubcourse) {
  * Import courseware version to hubcourse version
  * @param stdClass $hubcourse
  * @param stdClass $courseware
+ * @param bool $skipifexist Skip importing if hubcourse contains versions
  * @return bool|int
  * @throws backup_helper_exception
  * @throws dml_exception
@@ -817,14 +818,25 @@ function block_hubcourseinfo_majimport($hubcourse) {
  * @throws moodle_exception
  * @throws stored_file_creation_exception
  */
-function block_hubcourseinfo_majimport_versions($hubcourse, $courseware) {
+function block_hubcourseinfo_majimport_versions($hubcourse, $courseware, $skipifexist = true) {
     global $DB, $CFG;
     require_once(__DIR__ . '/../../backup/util/includes/restore_includes.php');
     require_once(__DIR__ . '/../hubcourseupload/lib.php');
 
+    $existingversions = $DB->get_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id]);
+    if ($skipifexist && count($existingversions)) {
+        if ($hubcourse->stableversion) {
+            return $hubcourse->stableversion;
+        }
+        foreach ($existingversions as $version) {
+            return $version->id;
+        }
+    }
+
     $fs = new file_storage();
     $coursewareversions = $DB->get_records('majhub_courseware_versions', ['coursewareid' => $courseware->id],
-        'timecreated DESC', '*', 0, get_config('block_hubcourseinfo', 'maxversionamount') - 1);
+        'timecreated DESC', '*', 0,
+        get_config('block_hubcourseinfo', 'maxversionamount') - count($existingversions) - 1);
     $lastid = 0;
 
     $stable_cversion = new stdClass();
@@ -864,7 +876,6 @@ function block_hubcourseinfo_majimport_versions($hubcourse, $courseware) {
         $version->fileid = 0;
         $id = $DB->insert_record('block_hubcourse_versions', $version);
         if (!$id) {
-            unlink($filepath);
             return false;
         }
 
