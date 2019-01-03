@@ -76,6 +76,8 @@ $string['timemodified'] = 'Time Modified';
 $string['averagerating'] = 'Average Ratings';
 
 $string['moodleversion'] = 'Moodle Version';
+$string['moodleversion_version'] = 'Version: ';
+$string['moodleversion_release'] = 'Release: ';
 $string['dependencies'] = 'Custom Plugin Required';
 
 $string['likes'] = 'Likes';

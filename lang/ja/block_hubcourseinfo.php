@@ -75,6 +75,8 @@ $string['timemodified'] = '更新日時';
 $string['averagerating'] = '平均評価';
 
 $string['moodleversion'] = 'ムードルのバージョン';
+$string['moodleversion_version'] = 'バージョン：';
+$string['moodleversion_release'] = 'リリース：';
 $string['dependencies'] = '使用するプラグイン';
 
 $string['likes'] = 'いいね';

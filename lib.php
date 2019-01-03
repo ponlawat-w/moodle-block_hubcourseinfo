@@ -190,7 +190,7 @@ function block_hubcourseinfo_renderinfo($hubcourse) {
         ),
         'demourl' => array(
             'title' => get_string('demourl', 'block_hubcourseinfo'),
-            'value' => $hubcourse->demourl ? html_writer::link($hubcourse->demourl, mb_substr($hubcourse->demourl, 0, 20) . '…', ['target' => '_blank']) : false
+            'value' => $hubcourse->demourl ? html_writer::link($hubcourse->demourl, mb_substr($hubcourse->demourl, 0, 30) . '…', ['target' => '_blank']) : false
         ),
         'description' => array(
             'title' => get_string('description'),
@@ -242,7 +242,7 @@ function block_hubcourseinfo_renderlike($hubcourse, $context) {
         $alreadyliked = $DB->count_records('block_hubcourse_likes', ['hubcourseid' => $hubcourse->id, 'userid' => $USER->id]) ? true : false;
     }
 
-    $html = '';
+    $html = html_writer::start_div('block-hubcourseinfo-indent');
 
     if ($cap_viewlike) {
         if ($likecount == 1) {
@@ -263,6 +263,8 @@ function block_hubcourseinfo_renderlike($hubcourse, $context) {
         );
         $html .= html_writer::end_div();
     }
+
+    $html .= html_writer::end_div();
 
     return $html;
 }
@@ -330,45 +332,49 @@ function block_hubcourseinfo_renderreviews($hubcourse, $context) {
         $html = html_writer::start_div();
         $html .= html_writer::div(get_string('averagerating', 'block_hubcourseinfo'), 'bold');
         $html .= html_writer::div(block_hubcourseinfo_renderstars($staramount) . ' (' . number_format($averagerating, 2) . ')'
-            , '', ['style' => 'margin-left: 1em;']);
+            , 'block-hubcourseinfo-indent');
         $html .= html_writer::end_div();
 
         $html .= html_writer::div(get_string('reviews', 'block_hubcourseinfo'), 'bold');
-    }
 
-    if (count($reviews) == 0) {
-        $html .= get_string($cap_submitreview ? 'noreview' : 'noreview_guest', 'block_hubcourseinfo');
-    } else if ($cap_viewreviews) {
-        foreach ($reviews as $review) {
-            $user = $DB->get_record('user', ['id' => $review->userid]);
+        $html .= html_writer::start_div('block-hubcourseinfo-indent');
+        if (count($reviews) == 0) {
+            $html .= get_string($cap_submitreview ? 'noreview' : 'noreview_guest', 'block_hubcourseinfo');
+        } else if ($cap_viewreviews) {
+            foreach ($reviews as $review) {
+                $user = $DB->get_record('user', ['id' => $review->userid]);
 
-            $html .= html_writer::start_div('', ['style' => 'margin: 0  0 10px 0.5em;']);
-            $html .= html_writer::div(block_hubcourseinfo_previewcomment($review->comment, 100));
-            $html .= html_writer::start_div('small', ['style' => 'margin-left: 1em;']);
-            $html .= html_writer::span(fullname($user), 'bold');
-            $html .= ' - ';
-            $html .= html_writer::span(userdate($review->timecreated, get_string('strftimedatefullshort', 'langconfig')));
-            $html .= html_writer::start_tag('br');
-            $html .= html_writer::span(block_hubcourseinfo_renderstars($review->rate));
-            $html .= html_writer::end_div();
-            $html .= html_writer::end_div();
+                $html .= html_writer::start_div('', ['style' => 'margin: 0  0 10px 0.5em;']);
+                $html .= html_writer::div(block_hubcourseinfo_previewcomment($review->comment, 100));
+                $html .= html_writer::start_div('small', ['style' => 'margin-left: 1em;']);
+                $html .= html_writer::span(fullname($user), 'bold');
+                $html .= ' - ';
+                $html .= html_writer::span(userdate($review->timecreated, get_string('strftimedatefullshort', 'langconfig')));
+                $html .= html_writer::start_tag('br');
+                $html .= html_writer::span(block_hubcourseinfo_renderstars($review->rate));
+                $html .= html_writer::end_div();
+                $html .= html_writer::end_div();
+            }
         }
-    }
+        $html .= html_writer::end_div();
 
-    $html .= html_writer::start_div('');
-    if ($cap_viewreviews && count($reviews) > 0) {
-        $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/view.php', ['id' => $hubcourse->id]),
-            html_writer::tag('i', '', ['class' => 'fa fa-caret-down']) .
-            ' ' . get_string('readmorereview', 'block_hubcourseinfo'));
-        $html .= html_writer::start_tag('br');
+        $html .= html_writer::start_div('');
+        if ($cap_viewreviews && count($reviews) > 0) {
+            $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/view.php', ['id' => $hubcourse->id]),
+                html_writer::tag('i', '', ['class' => 'fa fa-caret-down']) .
+                ' ' . get_string('readmorereview', 'block_hubcourseinfo'));
+            $html .= html_writer::start_tag('br');
+        }
+        if ($cap_submitreview) {
+            $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/write.php', ['id' => $hubcourse->id]),
+                html_writer::tag('i', '', ['class' => 'fa fa-pencil']) .
+                ' ' . get_string($edit ? 'editmyreview' : 'writereview', 'block_hubcourseinfo'),
+                ['class' => 'btn btn-default btn-block']);
+        }
+        $html .= html_writer::end_div();
+    } else {
+        $html = '';
     }
-    if ($cap_submitreview) {
-        $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/review/write.php', ['id' => $hubcourse->id]),
-            html_writer::tag('i', '', ['class' => 'fa fa-pencil']) .
-            ' ' . get_string($edit ? 'editmyreview' : 'writereview', 'block_hubcourseinfo'),
-            ['class' => 'btn btn-default btn-block']);
-    }
-    $html .= html_writer::end_div();
 
     return $html;
 }

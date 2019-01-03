@@ -135,6 +135,8 @@ class block_hubcourseinfo extends block_base {
         $this->page->requires->js('/blocks/hubcourseinfo/script.js');
         $this->page->requires->strings_for_js(['loading'], 'block_hubcourseinfo');
 
+        $this->page->requires->css('/blocks/hubcourseinfo/style.css');
+
         $html = '';
 
         $html .= block_hubcourseinfo_renderinfo($hubcourse);
@@ -152,26 +154,41 @@ class block_hubcourseinfo extends block_base {
             if ($stableversion) {
                 $dependencies = $DB->get_records('block_hubcourse_dependencies', ['versionid' => $stableversion->id], 'requiredpluginname');
 
-                $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/download.php', ['version' => $stableversion->id]),
-                    $OUTPUT->pix_icon('t/download', get_string('download')) .
-                    get_string('downloadcourse', 'block_hubcourseinfo'),
-                    array('class' => 'btn btn-default btn-block', 'target' => '_blank'));
-
                 $html .= html_writer::start_div();
                 $html .= html_writer::div(get_string('moodleversion', 'block_hubcourseinfo'), 'bold');
-                $html .= html_writer::div($stableversion->moodlerelease, '', ['style' => 'margin-left: 1em;']);
-                $html .= html_writer::div($stableversion->moodleversion, '', ['style' => 'margin-left: 1.5em;']);
+
+                $html .= html_writer::start_div('block-hubcourseinfo-indent');
+
+                $html .= html_writer::start_div();
+                $html .= html_writer::span(get_string('moodleversion_version', 'block_hubcourseinfo'),
+                    '', ['style' => 'font-weight: bold;']);
+                $html .= html_writer::span($stableversion->moodleversion, '');
+                $html .= html_writer::end_div();
+
+                $html .= html_writer::start_div();
+                $html .= html_writer::span(get_string('moodleversion_release', 'block_hubcourseinfo'),
+                    '', ['style' => 'font-weight: bold;']);
+                $html .= html_writer::span($stableversion->moodlerelease, '');
+                $html .= html_writer::end_div();
+
+                $html .= html_writer::end_div();
+
                 $html .= html_writer::end_div();
 
                 $html .= html_writer::start_div();
                 $html .= html_writer::div(get_string('dependencies', 'block_hubcourseinfo'), 'bold');
                 $html .= block_hubcourseinfo_renderdependencies($dependencies);
                 $html .= html_writer::end_div();
+
+                $html .= html_writer::link(new moodle_url('/blocks/hubcourseinfo/download.php', ['version' => $stableversion->id]),
+                    html_writer::tag('i', '', ['class' => 'fa fa-download']) . ' ' .
+                    get_string('downloadcourse', 'block_hubcourseinfo'),
+                    array('class' => 'btn btn-default btn-block', 'target' => '_blank'));
             }
 
             $versionamount = $DB->count_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id]);
             if ($versionamount > 0) {
-                $html .= html_writer::start_div('', ['style' => 'text-align: center;']);
+                $html .= html_writer::start_div('text-center', ['style' => 'margin-top: 0.5em;']);
                 $html .= html_writer::link(
                     new moodle_url('/blocks/hubcourseinfo/versionlist.php', ['id' => $hubcourse->id]),
                     get_string('downloadotherversions', 'block_hubcourseinfo')
