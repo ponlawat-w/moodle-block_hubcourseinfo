@@ -323,6 +323,7 @@ function block_hubcourseinfo_renderreviews($hubcourse, $context) {
     $edit = $myreview ? true : false;
 
     $reviews = $DB->get_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id], 'timecreated DESC', '*', 0, 5);
+    $totalreviews_count = $DB->count_records('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id]);
 
     $averagedata = $DB->get_record_sql('SELECT AVG(rate) AS averagerating FROM {block_hubcourse_reviews} WHERE hubcourseid = ?', [$hubcourse->id]);
     $averagerating = round($averagedata->averagerating, 2);
@@ -335,7 +336,12 @@ function block_hubcourseinfo_renderreviews($hubcourse, $context) {
             , 'block-hubcourseinfo-indent');
         $html .= html_writer::end_div();
 
-        $html .= html_writer::div(get_string('reviews', 'block_hubcourseinfo'), 'bold');
+        $html .= html_writer::start_div('bold');
+        $html .= get_string('reviews', 'block_hubcourseinfo');
+        if ($totalreviews_count) {
+            $html .= ' (' . $totalreviews_count. ')';
+        }
+        $html .= html_writer::end_div();
 
         $html .= html_writer::start_div('block-hubcourseinfo-indent');
         if (count($reviews) == 0) {
