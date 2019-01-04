@@ -78,7 +78,7 @@ $string['averagerating'] = 'Average Ratings';
 $string['moodleversion'] = 'Moodle Version';
 $string['moodleversion_version'] = 'Version: ';
 $string['moodleversion_release'] = 'Release: ';
-$string['dependencies'] = 'Custom Plugin Required';
+$string['dependencies'] = 'Custom Plugins Required';
 
 $string['likes'] = 'Likes';
 $string['nolike'] = 'Be the first to like this course.';
