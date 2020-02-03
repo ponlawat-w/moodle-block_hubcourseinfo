@@ -38,6 +38,9 @@ if (!$hubcourse) {
     throw new moodle_exception('hubcourse not found', 'block_hubcourseinfo');
 }
 
+$PAGE->set_context(block_hubcourseinfo_getcontextfromhubcourse($hubcourse));
+$PAGE->set_url('/blocks/hubcourseinfo/admin/truncate.php', ['id' => $hubcourse->id]);
+
 $confirmform = new truncateconfirm_form($hubcourse);
 if ($confirmform->is_submitted()) {
     if ($confirmform->is_cancelled()) {
@@ -52,9 +55,7 @@ if ($confirmform->is_submitted()) {
     }
 }
 
-$PAGE->set_context(block_hubcourseinfo_getcontextfromhubcourse($hubcourse));
 $PAGE->set_pagelayout('standard');
-$PAGE->set_url('/blocks/hubcourseinfo/admin/truncate.php', ['id' => $hubcourse->id]);
 $PAGE->set_title(get_string('truncateconfirm', 'block_hubcourseinfo'));
 $PAGE->set_heading($PAGE->title);
 $PAGE->navbar->add(get_string('managehubcourse', 'block_hubcourseinfo'),

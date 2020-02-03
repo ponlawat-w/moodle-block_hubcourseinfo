@@ -55,6 +55,7 @@ class deleteconfirm_form extends moodleform {
         $form->addElement('html', html_writer::tag('p', get_string('deleteconfirm_description', 'block_hubcourseinfo')));
 
         $form->addElement('hidden', 'id', $this->hubcourse->id);
+        $form->setType('id', PARAM_INT);
 
         $this->add_action_buttons(true, get_string('delete'));
     }

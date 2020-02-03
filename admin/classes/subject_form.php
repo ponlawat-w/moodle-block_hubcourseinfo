@@ -60,10 +60,12 @@ class subject_form extends moodleform {
 
         $form->addElement('text', 'name', get_string('subjectname', 'block_hubcourseinfo'));
         $form->setDefault('name', $this->defaultname);
+        $form->setType('name', PARAM_TEXT);
         $form->addRule('name', get_string('required'), 'required');
 
         $form->addElement('hidden', 'id');
         $form->setDefault('id', $this->id);
+        $form->setType('id', PARAM_INT);
 
         $this->add_action_buttons($this->id ? true : false, get_string($this->id ? 'edit' : 'add'));
     }

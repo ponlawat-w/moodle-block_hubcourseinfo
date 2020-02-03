@@ -99,18 +99,22 @@ class editmetadata_form extends moodleform {
 
         $form->addElement('text', 'fullname', get_string('fullnamecourse'), ['style' => 'width: 100%;']);
         $form->setDefault('fullname', $this->course->fullname);
+        $form->setType('fullname', PARAM_TEXT);
         $form->addRule('fullname', get_string('required'), 'required');
 
         $form->addElement('text', 'shortname', get_string('shortnamecourse'), ['style' => 'width: 100%;']);
         $form->setDefault('shortname', $this->course->shortname);
+        $form->setType('shortname', PARAM_TEXT);
         $form->addRule('shortname', get_string('required'), 'required');
 
         $form->addElement('select', 'subject', get_string('subject', 'block_hubcourseinfo'), $subjectsoptions);
         $form->setDefault('subject', $this->hubcourse->subject);
+        $form->setType('subject', PARAM_INT);
         $form->addRule('subject', get_string('required'), 'required');
 
         $form->addElement('text', 'tags', get_string('tags', 'block_hubcourseinfo'), ['style' => 'width: 100%']);
         $form->setDefault('tags', $this->hubcourse->tags);
+        $form->setType('tags', PARAM_TEXT);
         $form->addHelpButton('tags', 'tags', 'block_hubcourseinfo');
 
         $form->addElement('select', 'category', get_string('category'), $categoriesoptions);
@@ -124,7 +128,9 @@ class editmetadata_form extends moodleform {
         $form->setDefault('description', $this->hubcourse->description);
 
         $form->addElement('hidden', 'id', $this->hubcourse->id);
+        $form->setType('id', PARAM_INT);
         $form->addElement('hidden', 'new', $this->new);
+        $form->setType('new', PARAM_INT);
 
         $this->add_action_buttons(!$this->new, ($this->new) ? get_string('continue') : get_string('save'));
     }

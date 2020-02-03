@@ -92,6 +92,7 @@ class review_form extends moodleform {
         $this->add_action_buttons(true, get_string($this->editing ? 'editreview' : 'submitreview', 'block_hubcourseinfo'));
 
         $form->addElement('hidden', 'id', $this->hubcourse->id);
+        $form->setType('id', PARAM_INT);
     }
 
     /**

@@ -30,6 +30,12 @@ require_once(__DIR__ . '/classes/subject_form.php');
 require_login();
 require_capability('block/hubcourseinfo:managesubjects', context_system::instance());
 
+$PAGE->set_context(context_system::instance());
+$PAGE->set_pagelayout('standard');
+$PAGE->set_url('/blocks/hubcourseinfo/admin/subjects.php');
+$PAGE->set_title(get_string('managesubjects', 'block_hubcourseinfo'));
+$PAGE->set_heading($PAGE->title);
+
 $editsubjectform = new subject_form(-1);
 if ($editsubjectform->is_submitted()) {
     if ($editsubjectform->is_cancelled()) {
@@ -55,12 +61,6 @@ if ($editsubjectform->is_submitted()) {
 
     $editsubjectform = new subject_form($subject->id, $subject->name);
 }
-
-$PAGE->set_context(context_system::instance());
-$PAGE->set_pagelayout('standard');
-$PAGE->set_url('/blocks/hubcourseinfo/admin/subjects.php');
-$PAGE->set_title(get_string('managesubjects', 'block_hubcourseinfo'));
-$PAGE->set_heading($PAGE->title);
 
 $PAGE->navbar
     ->add(get_string('administrationsite'), new moodle_url('/admin/search.php'))

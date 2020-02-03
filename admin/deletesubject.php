@@ -30,6 +30,12 @@ require_once(__DIR__ . '/classes/deletesubjectconfirm_form.php');
 require_login();
 require_capability('block/hubcourseinfo:managesubjects', context_system::instance());
 
+$PAGE->set_context(context_system::instance());
+$PAGE->set_pagelayout('standard');
+$PAGE->set_url('/blocks/hubcourseinfo/admin/subjects.php');
+$PAGE->set_title(get_string('managesubjects', 'block_hubcourseinfo'));
+$PAGE->set_heading($PAGE->title);
+
 $subjectid = required_param('id', PARAM_INT);
 
 $subject = $DB->get_record('block_hubcourse_subjects', ['id' => $subjectid]);
@@ -54,12 +60,6 @@ if ($confirmform->is_submitted()) {
         throw new moodle_exception('Cannt delete subject', 'block_hubcourseinfo');
     }
 }
-
-$PAGE->set_context(context_system::instance());
-$PAGE->set_pagelayout('standard');
-$PAGE->set_url('/blocks/hubcourseinfo/admin/subjects.php');
-$PAGE->set_title(get_string('managesubjects', 'block_hubcourseinfo'));
-$PAGE->set_heading($PAGE->title);
 
 $PAGE->navbar
     ->add(get_string('administrationsite'), new moodle_url('/admin/search.php'))

@@ -57,6 +57,7 @@ class majimportconfirm_form extends moodleform {
         $form->addElement('html', html_writer::tag('h3', get_string('majimportconfirm_title', 'block_hubcourseinfo', $course->fullname), ['class' => 'text-primary']));
         $form->addElement('html', html_writer::tag('p', get_string('majimportconfirm_description', 'block_hubcourseinfo')));
         $form->addElement('hidden', 'id', $this->hubcourse->id);
+        $form->setType('id', PARAM_INT);
 
         $this->add_action_buttons(true, get_string('submit'));
     }

@@ -55,6 +55,7 @@ class deletesubjectconfirm_form extends moodleform {
         $form->addElement('html', html_writer::tag('p', get_string('deletesubjectconfirm_description', 'block_hubcourseinfo')));
 
         $form->addElement('hidden', 'id', $this->subject->id);
+        $form->setType('id', PARAM_INT);
 
         $this->add_action_buttons(true, get_string('delete'));
     }

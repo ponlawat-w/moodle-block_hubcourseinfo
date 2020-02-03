@@ -79,6 +79,7 @@ class version_form extends moodleform {
         $form = &$this->_form;
 
         $form->addElement('text', 'description', get_string('description'));
+        $form->setType('description', PARAM_TEXT);
         $form->addRule('description', get_string('required'), 'required');
 
         if ($this->edit) {
@@ -97,5 +98,6 @@ class version_form extends moodleform {
 
             $this->add_action_buttons(true, get_string('add'));
         }
+        $form->setType('id', PARAM_INT);
     }
 }

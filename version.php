@@ -23,5 +23,5 @@
  */
 
 $plugin->component = 'block_hubcourseinfo';
-$plugin->version = 2019010301;
+$plugin->version = 2020020300;
 $plugin->requires = 2017051504;

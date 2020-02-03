@@ -42,6 +42,10 @@ if (!$course) {
 require_login();
 require_capability('block/hubcourseinfo:submitreview', $blockcontext);
 
+$PAGE->set_context($blockcontext);
+$PAGE->set_pagelayout('standard');
+$PAGE->set_url('/blocks/hubcourseinfo/review/write.php');
+
 $review = $DB->get_record('block_hubcourse_reviews', ['hubcourseid' => $hubcourse->id, 'userid' => $USER->id]);
 $editing = $review ? true : false;
 
@@ -73,9 +77,6 @@ if ($form->is_submitted()) {
     ]);
 }
 
-$PAGE->set_context($blockcontext);
-$PAGE->set_pagelayout('standard');
-$PAGE->set_url('/blocks/hubcourseinfo/review/write.php');
 $PAGE->set_title($course->fullname . ' - ' . get_string($editing ? 'editreview' : 'writereview', 'block_hubcourseinfo'));
 $PAGE->set_heading($PAGE->title);
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $course->id]))

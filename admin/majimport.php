@@ -31,15 +31,18 @@ require_once(__DIR__ . '/classes/majimportconfirm_form.php');
 require_login();
 require_capability('block/hubcourseinfo:importfrommajhub', context_system::instance());
 
-if (!block_hubcourseinfo_uploadblockenabled()) {
-    throw new moodle_exception('block_hubcourseupload is required in this site to perform this action.');
-}
-
 $hubcourseid = required_param('id', PARAM_INT);
 
 $hubcourse = $DB->get_record('block_hubcourses', ['id' => $hubcourseid]);
 if (!$hubcourse) {
     throw new moodle_exception('hubcourse not found', 'block_hubcourseinfo');
+}
+
+$PAGE->set_context(block_hubcourseinfo_getcontextfromhubcourse($hubcourse));
+$PAGE->set_pagelayout('standard');
+
+if (!block_hubcourseinfo_uploadblockenabled()) {
+    throw new moodle_exception('block_hubcourseupload is required in this site to perform this action.');
 }
 
 $confirmform = new majimportconfirm_form($hubcourse);
@@ -57,8 +60,6 @@ if ($confirmform->is_submitted()) {
     }
 }
 
-$PAGE->set_context(block_hubcourseinfo_getcontextfromhubcourse($hubcourse));
-$PAGE->set_pagelayout('standard');
 $PAGE->set_url('/blocks/hubcourseinfo/admin/truncate.php', ['id' => $hubcourse->id]);
 $PAGE->set_title(get_string('truncateconfirm', 'block_hubcourseinfo'));
 $PAGE->set_heading($PAGE->title);
