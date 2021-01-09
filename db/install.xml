@@ -15,7 +15,7 @@
                 <FIELD NAME="subject" SEQUENCE="false" TYPE="int" NOTNULL="true" LENGTH="11" DEFAULT="0"/>
                 <FIELD NAME="tags" SEQUENCE="false" TYPE="char" NOTNULL="false" LENGTH="500" DEFAULT=""/>
                 <FIELD NAME="demourl" LENGTH="500" SEQUENCE="false" TYPE="char" NOTNULL="true"/>
-                <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true" DEFAULT=""/>
+                <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true"/>
                 <FIELD NAME="timecreated" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="timemodified" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
             </FIELDS>
@@ -35,8 +35,8 @@
                 <FIELD NAME="id" LENGTH="11" SEQUENCE="true" TYPE="int" NOTNULL="true"/>
                 <FIELD NAME="hubcourseid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="moodleversion" LENGTH="11" SEQUENCE="false" TYPE="float" NOTNULL="true" DEFAULT="0"/>
-                <FIELD NAME="moodlerelease" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="200" DEFAULT=""/>
-                <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true" DEFAULT=""/>
+                <FIELD NAME="moodlerelease" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="200"/>
+                <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true"/>
                 <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="timeuploaded" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="fileid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="false" DEFAULT="0"/>
@@ -55,7 +55,7 @@
                 <FIELD NAME="versionid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="rate" SEQUENCE="false" TYPE="int" NOTNULL="true" LENGTH="11" DEFAULT="0"/>
-                <FIELD NAME="comment" SEQUENCE="false" TYPE="text" NOTNULL="true" DEFAULT=""/>
+                <FIELD NAME="comment" SEQUENCE="false" TYPE="text" NOTNULL="true"/>
                 <FIELD NAME="commentformat" SEQUENCE="false" TYPE="int" NOTNULL="true" LENGTH="11"/>
                 <FIELD NAME="timecreated" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true"/>
             </FIELDS>
