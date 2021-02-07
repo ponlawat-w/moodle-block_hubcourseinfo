@@ -88,5 +88,34 @@ function xmldb_block_hubcourseinfo_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2018121204, 'hubcourseinfo');
     }
 
+    if ($oldversion < 2021020600) {
+        $table = new xmldb_table('block_hubcourses');
+        $fields = [
+            new xmldb_field('leadauthor_roman', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'description'),
+            new xmldb_field('leadauthor_jp', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_roman'),
+            new xmldb_field('leadauthor_email', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_jp'),
+            new xmldb_field('leadauthor_aff_roman', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_email'),
+            new xmldb_field('leadauthor_aff_jp', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_aff_roman'),
+            new xmldb_field('coauthor_roman', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_aff_jp'),
+            new xmldb_field('coauthor_jp', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_roman'),
+            new xmldb_field('coauthor_email', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_jp'),
+            new xmldb_field('coauthor_aff_roman', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_email'),
+            new xmldb_field('coauthor_aff_jp', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_aff_roman'),
+            new xmldb_field('author3', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_aff_jp'),
+            new xmldb_field('author4', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'author3'),
+            new xmldb_field('author5', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'author4'),
+            new xmldb_field('author_etc', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'author5'),
+            new xmldb_field('keywords', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'author_etc')
+        ];
+
+        foreach ($fields as $field) {
+            if (!$dbmanager->field_exists($table, $field)) {
+                $dbmanager->add_field($table, $field);
+            }
+        }
+
+        upgrade_block_savepoint(true, 2021020600, 'hubcourseinfo');
+    }
+
     return true;
 }

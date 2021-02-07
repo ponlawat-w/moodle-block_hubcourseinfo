@@ -16,6 +16,21 @@
                 <FIELD NAME="tags" SEQUENCE="false" TYPE="char" NOTNULL="false" LENGTH="500" DEFAULT=""/>
                 <FIELD NAME="demourl" LENGTH="500" SEQUENCE="false" TYPE="char" NOTNULL="true"/>
                 <FIELD NAME="description" SEQUENCE="false" TYPE="text" NOTNULL="true"/>
+                <FIELD NAME="leadauthor_roman" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="leadauthor_jp" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="leadauthor_email" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="leadauthor_aff_roman" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="leadauthor_aff_jp" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="coauthor_roman" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="coauthor_jp" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="coauthor_email" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="coauthor_aff_roman" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="coauthor_aff_jp" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="author3" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="author4" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="author5" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="author_etc" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="100" DEFAULT="" />
+                <FIELD NAME="keywords" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="500" DEFAULT="" />
                 <FIELD NAME="timecreated" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
                 <FIELD NAME="timemodified" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="true" DEFAULT="0"/>
             </FIELDS>

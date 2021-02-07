@@ -65,6 +65,21 @@ if ($form->is_submitted()) {
         $hubcourse->tags = $data->tags;
         $hubcourse->demourl = $data->demourl;
         $hubcourse->description = $data->description;
+        $hubcourse->leadauthor_roman = $data->leadauthor_roman;
+        $hubcourse->leadauthor_jp = $data->leadauthor_jp;
+        $hubcourse->leadauthor_email = $data->leadauthor_email;
+        $hubcourse->leadauthor_aff_roman = $data->leadauthor_aff_roman;
+        $hubcourse->leadauthor_aff_jp = $data->leadauthor_aff_jp;
+        $hubcourse->coauthor_roman = $data->coauthor_roman;
+        $hubcourse->coauthor_jp = $data->coauthor_jp;
+        $hubcourse->coauthor_email = $data->coauthor_email;
+        $hubcourse->coauthor_aff_roman = $data->coauthor_aff_roman;
+        $hubcourse->coauthor_aff_jp = $data->coauthor_aff_jp;
+        $hubcourse->author3 = $data->author3;
+        $hubcourse->author4 = $data->author4;
+        $hubcourse->author5 = $data->author5;
+        $hubcourse->author_etc = $data->author_etc;
+        $hubcourse->keywords = $data->keywords;
         $hubcourse->timemodified = time();
         $DB->update_record('block_hubcourses', $hubcourse);
 

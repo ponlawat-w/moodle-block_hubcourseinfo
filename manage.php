@@ -56,6 +56,28 @@ $metadatatable->data = [
     [get_string('demourl', 'block_hubcourseinfo'), $hubcourse->demourl ? html_writer::link($hubcourse->demourl, $hubcourse->demourl, ['target' => '_blank']) : get_string('notknow', 'block_hubcourseinfo')],
     [get_string('description'), $hubcourse->description ? nl2br(htmlspecialchars($hubcourse->description)) : get_string('notknow', 'block_hubcourseinfo')],
 ];
+$extrafields = [
+    'leadauthor_roman',
+    'leadauthor_jp',
+    'leadauthor_email',
+    'leadauthor_aff_roman',
+    'leadauthor_aff_jp',
+    'coauthor_roman',
+    'coauthor_jp',
+    'coauthor_email',
+    'coauthor_aff_roman',
+    'coauthor_aff_jp',
+    'author3',
+    'author4',
+    'author5',
+    'author_etc',
+    'keywords'
+];
+foreach ($extrafields as $extrafield) {
+    if ($hubcourse->$extrafield) {
+        $metadatatable->data[] = [get_string($extrafield, 'block_hubcourseinfo'), $hubcourse->$extrafield];
+    }
+}
 
 $versiontable = new html_table();
 $versiontable->head = [
