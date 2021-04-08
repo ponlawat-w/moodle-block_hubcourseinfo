@@ -48,6 +48,7 @@ class block_hubcourseinfo_observer {
 
             $hubcourse = block_hubcourseinfo_gethubcoursefromcourseid($course->id);
             if (!$hubcourse) {
+                block_hubcourseinfo_deleteotherblockinstances($coursecontext->id, false);
                 $weight = 0;
                 $minweight = $DB->get_record_sql('SELECT MIN(defaultweight) AS value FROM {block_instances} WHERE parentcontextid = ?', [$coursecontext->id]);
                 if ($minweight) {

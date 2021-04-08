@@ -55,7 +55,7 @@ $versiontable->head = [
 ];
 $versiontable->data = [];
 
-$versions = $DB->get_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id], 'timeuploaded ASC');
+$versions = $DB->get_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id], 'id ASC');
 foreach ($versions as $version) {
     $stable = ($hubcourse->stableversion == $version->id);
     $stabletext = '';

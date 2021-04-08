@@ -44,7 +44,6 @@ $string['settings:subjects'] = 'Manage subjects';
 $string['managesubjectslink'] = 'Click here to manage course subjects in this site';
 $string['managesubjects'] = 'Manage course subjects';
 $string['coursesubjects'] = 'Course subjects';
-$string['coursesubjects'] = 'Course subjects';
 $string['coursesubject'] = 'Course subject';
 $string['newsubject'] = 'Add new subject';
 $string['subjectname'] = 'Subject name';
@@ -120,11 +119,21 @@ $string['editmetadatanewcourse'] = '<strong>Congratulations!</strong> Your cours
 
 $string['timeuploaded'] = 'Time Uploaded';
 $string['downloads'] = 'Downloads';
-$string['addversion'] = 'Add a new version';
+$string['addversion'] = 'Upload a new version';
 $string['editversion'] = 'Edit Course Version';
 $string['current'] = 'Current';
-$string['reset'] = 'Reset content';
-$string['apply'] = 'Apply content';
+$string['reset'] = 'Reset';
+$string['reset_description'] = 'Reset course content to the one in the version';
+$string['apply'] = 'Apply';
+$string['apply_description'] = 'Apply the version to the course content';
+$string['rebuild'] = 'Rebuild';
+$string['rebuild_description'] = 'Replace the version archive with the current content';
+$string['rebuildasnewversion'] = 'Rebuild as a new version';
+$string['rebuildasnewversion_description'] = 'Build a new version from the current content';
+
+$string['rebuildconfirm_title'] = 'Version Rebuild Confirmation';
+$string['rebuildconfirm_description'] = 'Are you sure you want to rebuild and replace the version backup file from the current course content?';
+$string['rebuildnewversionconfirm_description'] = 'Are you sure you want to build a new version from the current course content?';
 
 $string['coursefile'] = 'Course File';
 $string['maxfilesize'] = 'Maximum file size: {$a}MB';

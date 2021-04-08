@@ -36,6 +36,7 @@ class restore_hubcourseinfo_block_task extends restore_block_task {
      * Define my settings
      */
     protected function define_my_settings() {
+      $this->add_setting(new restore_generic_setting('skiphubcoursedata', base_setting::IS_BOOLEAN, false));
     }
 
     /**
@@ -44,7 +45,9 @@ class restore_hubcourseinfo_block_task extends restore_block_task {
      * @throws restore_step_exception
      */
     protected function define_my_steps() {
-        $this->add_step(new restore_hubcourseinfo_block_structure_step('hubcourseinfo_structure', 'hubcourseinfo.xml'));
+        if (!$this->get_setting('skiphubcoursedata')) {
+          $this->add_step(new restore_hubcourseinfo_block_structure_step('hubcourseinfo_structure', 'hubcourseinfo.xml'));
+        }
     }
 
     /**

@@ -22,6 +22,10 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+if (block_hubcourseinfo_uploadblockenabled()) {
+  require_once(__DIR__ . '/../hubcourseupload/lib.php');
+}
+
 /**
  * Get hubcourse object from course ID
  * @param int $courseid
@@ -484,6 +488,7 @@ function block_hubcourseinfo_deleteversion($versionorid, $contextid) {
     foreach ($files as $file) {
         $file->delete();
     }
+    $fs->delete_area_files($contextid, 'block_hubcourse', 'course', $version->id);
 
     $reviews = $DB->get_records('block_hubcourse_reviews', ['versionid' => $version->id]);
     foreach ($reviews as $review) {
@@ -550,8 +555,11 @@ function block_hubcourseinfo_pluginstodependency($plugins, $versionid) {
 
     global $DB;
 
+    $DB->delete_records('block_hubcourse_dependencies', ['versionid' => $versionid]);
+
     $standardmods = core_plugin_manager::standard_plugins_list('mod');
     $standardblocks = core_plugin_manager::standard_plugins_list('block');
+    $standardblocks[] = 'hubcourseinfo';
 
     foreach ($plugins['mod'] as $modname => $version) {
         if (in_array($modname, $standardmods)) {
@@ -590,8 +598,25 @@ function block_hubcourseinfo_pluginstodependency($plugins, $versionid) {
  * @throws dml_exception
  * @return bool
  */
-function block_hubcourseinfo_savembzdependencies($courseid, $versionid, $filepath) {
+function block_hubcourseinfo_savembzdependencies($courseid, $versionid, $filepath = null) {
     global $USER;
+    if (!$filepath) {
+      $fs = get_file_storage();
+      $files = $fs->get_area_files(block_hubcourseinfo_getcontextfromcourseid($courseid)->id, 'block_hubcourse', 'course', $versionid);
+      foreach ($files as $file) {
+        $exts = explode('.', $file->get_filename());
+        $ext = $exts[count($exts) - 1];
+        if ($ext == 'mbz') {
+          global $CFG;
+          $hash = $file->get_contenthash();
+          $filepath = $CFG->dataroot . '/filedir/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash;
+          break;
+        }
+      }
+    }
+    if (!$filepath || !file_exists($filepath)) {
+      throw new moodle_exception('invalid file path');
+    }
     $extractedname = restore_controller::get_tempdir_name($courseid, $USER->id);
     $extractedpath = block_hubcourseinfo_getbackuppath($extractedname);
     $fb = get_file_packer('application/vnd.moodle.backup');
@@ -772,6 +797,24 @@ function block_hubcourseinfo_clearcontents($courseorid) {
     $DB->delete_records('course_sections', array('course' => $course->id));
 
     return true;
+}
+
+function block_hubcourseinfo_deleteotherblockinstances($coursecontextid, $exceptfirst) {
+  global $DB;
+  $blocks = $DB->get_records('block_instances', ['parentcontextid' => $coursecontextid], 'id ASC');
+  $i = 0;
+  foreach ($blocks as $block) {
+    if ($exceptfirst && $i++ == 0) {
+      continue;
+    }
+    if ($block->blockname == 'hubcourseinfo') {
+      blocks_delete_instance($block, true);
+      $hubcourses = $DB->get_records('block_hubcourses', ['instanceid' => $block->id]);
+      foreach ($hubcourses as $hubcourse) {
+        block_hubcourseinfo_fulldelete($hubcourse);
+      }
+    }
+  }
 }
 
 /**

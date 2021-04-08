@@ -123,7 +123,17 @@ $string['addversion'] = 'バージョンを追加';
 $string['editversion'] = '編集';
 $string['current'] = '現在';
 $string['reset'] = 'コンテンツをリセットする';
+$string['reset_description'] = 'Reset course content to the one in the version';
 $string['apply'] = 'このバージョンを適用する';
+$string['apply_description'] = 'Apply the version to the course content';
+$string['rebuild'] = 'Rebuild';
+$string['rebuild_description'] = 'Replace the version archive with the current content';
+$string['rebuildasnewversion'] = 'Rebuild as a new version';
+$string['rebuildasnewversion_description'] = 'Build a new version from the current content';
+
+$string['rebuildconfirm_title'] = 'Version Rebuild Confirmation';
+$string['rebuildconfirm_description'] = 'Are you sure you want to rebuild and replace the version backup file from the current course content?';
+$string['rebuildnewversionconfirm_description'] = 'Are you sure you want to build a new version from the current course content?';
 
 $string['coursefile'] = 'コースのファイル';
 $string['maxfilesize'] = '最大サイズ: {$a}MB';

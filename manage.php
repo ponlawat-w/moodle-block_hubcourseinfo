@@ -88,20 +88,20 @@ $versiontable->head = [
 ];
 $versiontable->data = [];
 
-$versions = $DB->get_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id], 'timeuploaded ASC');
+$versions = $DB->get_records('block_hubcourse_versions', ['hubcourseid' => $hubcourse->id], 'id ASC');
 foreach ($versions as $version) {
     $stable = ($hubcourse->stableversion == $version->id);
     $stabletext = '';
     if ($stable) {
-        $stabletext = ' ' . html_writer::tag('span', get_string('current', 'block_hubcourseinfo'), ['class' => 'label label-info']);
+        $stabletext = ' ' . html_writer::tag('span', '(' . get_string('current', 'block_hubcourseinfo') . ')', ['class' => 'label label-info']);
 
         $applybutton = html_writer::link(new moodle_url('/blocks/hubcourseupload/restore.php', ['version' => $version->id]),
             html_writer::tag('i','', ['class' => 'fa fa-refresh']) . ' ' . get_string('reset', 'block_hubcourseinfo'),
-            ['class' => 'btn btn-sm btn-default']) . ' ';
+            ['class' => 'btn btn-sm btn-default', 'title' => get_string('reset_description', 'block_hubcourseinfo')]) . ' ';
     } else {
         $applybutton = html_writer::link(new moodle_url('/blocks/hubcourseupload/restore.php', ['version' => $version->id]),
             html_writer::tag('i','', ['class' => 'fa fa-circle']) . ' ' . get_string('apply', 'block_hubcourseinfo'),
-            ['class' => 'btn btn-sm btn-default']) . ' ';
+            ['class' => 'btn btn-sm btn-default', 'title' => get_string('apply_description', 'block_hubcourseinfo')]) . ' ';
     }
 
     if (!block_hubcourseinfo_uploadblockenabled()) {
@@ -111,15 +111,18 @@ foreach ($versions as $version) {
     $editbutton = html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/edit.php', ['id' => $version->id]),
         html_writer::tag('i', '', ['class' => 'fa fa-edit']) . ' ' . get_string('editdelete', 'block_hubcourseinfo'),
         ['class' => 'btn btn-sm btn-default']);
+    $rebuildbutton = html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/rebuild.php', ['vid' => $version->id]),
+      html_writer::tag('i', '', ['class' => 'fa fa-archive']) . ' ' . get_string('rebuild', 'block_hubcourseinfo'),
+      ['class' => 'btn btn-sm btn-default', 'title' => get_string('rebuild_description', 'block_hubcourseinfo')]);
     $downloadbutton = html_writer::link(new moodle_url('/blocks/hubcourseinfo/download.php', ['version' => $version->id]),
         html_writer::tag('i', '', ['class' => 'fa fa-download']) . ' ' . get_string('download'),
         ['class' => 'btn btn-sm btn-default']);
 
     $versiontable->data[] = [
-        userdate($version->timeuploaded) . $stabletext,
+        userdate($version->timeuploaded, get_string('strftimedatetimeshort', 'langconfig')) . $stabletext,
         $version->description,
         number_format($DB->count_records('block_hubcourse_downloads', ['versionid' => $version->id]), 0),
-        $editbutton . ' ' . $applybutton . $downloadbutton
+        $editbutton . $applybutton . $rebuildbutton . $downloadbutton
     ];
 }
 
@@ -144,6 +147,10 @@ echo html_writer::tag('h3', get_string('manageversion', 'block_hubcourseinfo'));
 echo html_writer::table($versiontable);
 $maxversion = get_config('block_hubcourseinfo', 'maxversionamount');
 if (count($versions) < $maxversion) {
+    echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/rebuild.php', ['hid' => $hubcourse->id]),
+      html_writer::tag('i', '', ['class' => 'fa fa-archive']) . ' ' . get_string('rebuildasnewversion', 'block_hubcourseinfo'),
+      ['class' => 'btn btn-success', 'title' => get_string('rebuildasnewversion_description', 'block_hubcourseinfo')]);
+    echo ' ';
     echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/version/add.php', ['id' => $hubcourse->id]),
         html_writer::tag('i', '', ['class' => 'fa fa-plus']) . ' ' . get_string('addversion', 'block_hubcourseinfo'),
         ['class' => 'btn btn-success']);
