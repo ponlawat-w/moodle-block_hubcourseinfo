@@ -40,6 +40,7 @@ $string['settings:autocreateinfoblock_decription'] = 'Automatically create an in
 $string['settings:maxversionamount'] = 'Maximum version amount';
 $string['settings:maxversionamount_description'] = 'Maximum number of version amount in one course';
 $string['settings:subjects'] = 'Manage subjects';
+$string['settings:metadatafields'] = 'Manage Metadata Fields';
 
 $string['managesubjectslink'] = 'Click here to manage course subjects in this site';
 $string['managesubjects'] = 'Manage course subjects';
@@ -51,6 +52,16 @@ $string['editsubject'] = 'Edit course subject: {$a}';
 $string['deletesubjectconfirm'] = 'Delete course subject confirmation';
 $string['truncateconfirm'] = 'Truncate hubcourse data confirmation';
 $string['majimportconfirm'] = 'MAJ Hub import confirmation';
+
+$string['managemetadatafields'] = 'Manage Metadata Fields';
+$string['managemetadatafieldslink'] = 'Click here to manage metadata fields';
+$string['metadatafields'] = 'Metadata Fields';
+$string['newfield'] = 'Add New Field';
+$string['metadatafieldname'] = 'Field name';
+$string['deletemetadatafieldconfirm'] = 'Delete Metadata Field Confirmation';
+$string['deletemetadatafieldconfirm_title'] = 'Delete metadata field confirmation: {$a}';
+$string['deletemetadatafieldconfirm_description'] = 'Are you sure you want to delete this metadata field? All the values of this field will be loss.';
+$string['editmetadatafield'] = 'Edit metadata field: {$a}';
 
 $string['deletesubjectconfirm_title'] = 'Course subject delete confirmation: {$a}';
 $string['deletesubjectconfirm_description'] = 'Are you sure you want to delete this course subject? The action is cannot be reverted, and all courses in the subject will be moved to non-subject course.';
@@ -166,19 +177,3 @@ $string['error_cannotreadfile'] = 'Unable to read file. This might be caused fro
 $string['error_notcoursebackupfile'] = 'Unable to upload file because it is not a course backup file.';
 $string['error_cannotdeletestableversion'] = 'Unable to delete current version';
 $string['error_nomajhub'] = 'This course is not in MAJ hub courseware.';
-
-$string['leadauthor_roman'] = 'Lead Author Name (Roman)';
-$string['leadauthor_jp'] = 'Lead Author Name (Japanese)';
-$string['leadauthor_email'] = 'Lead Author E-mail';
-$string['leadauthor_aff_roman'] = 'Lead Author Affiliation (Roman)';
-$string['leadauthor_aff_jp'] = 'Lead Author Affiliation (Japanese)';
-$string['coauthor_roman'] = 'Co-Author Name (Roman)';
-$string['coauthor_jp'] = 'Co-Author Name (Japanese)';
-$string['coauthor_email'] = 'Co-Author E-mail';
-$string['coauthor_aff_roman'] = 'Co-Author Affiliation (Roman)';
-$string['coauthor_aff_jp'] = 'Co-Author Affiliation (Japanese)';
-$string['author3'] = 'Third Co-Author';
-$string['author4'] = 'Fourth Co-Author';
-$string['author5'] = 'Fifth Co-Author';
-$string['author_etc'] = 'Other Contributors';
-$string['keywords'] = 'Keywords';

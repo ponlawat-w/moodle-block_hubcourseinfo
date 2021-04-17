@@ -31,13 +31,13 @@ require_once(__DIR__ . '/../../../../lib/formslib.php');
 class deletesubjectconfirm_form extends moodleform {
 
     /**
-     * @var string $subject Subject name to show
+     * @var object $subject Subject name to show
      */
     private $subject;
 
     /**
      * deletesubjectconfirm_form constructor.
-     * @param string $subject
+     * @param object $subject
      */
     public function __construct($subject) {
         $this->subject = $subject;

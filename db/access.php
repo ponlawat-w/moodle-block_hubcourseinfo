@@ -105,5 +105,13 @@ $capabilities = array(
         'archetypes' => array(
             'user' => CAP_ALLOW
         )
+    ),
+    'block/hubcourseinfo:managemetadatafields' => array(
+      'riskbitmask' => 0,
+      'captype' => 'write',
+      'contextlevel' => CONTEXT_SYSTEM,
+      'archetypes' => array(
+        'manager' => CAP_ALLOW
+      )
     )
 );

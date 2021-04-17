@@ -1000,3 +1000,42 @@ function block_hubcourseinfo_majimport_downloads($hubcourse, $courseware, $hubco
 
     return true;
 }
+
+function block_hubcourseinfo_getmetadatafields() {
+  global $DB;
+  return $DB->get_records('block_hubcourse_metafields', [], 'id ASC');
+}
+
+function block_hubcourseinfo_updatemetadata($hubcourseformdata) {
+  global $DB;
+  $metadatafields = block_hubcourseinfo_getmetadatafields();
+  $params = [$hubcourseformdata->id];
+  $fieldidsbindings = [];
+  foreach ($metadatafields as $metadatafield) {
+    $params[] = $metadatafield->id;
+    $fieldidsbindings[] = '?';
+
+    $fieldname = 'metadata_' . $metadatafield->id;
+
+    if (!isset($hubcourseformdata->{$fieldname}) || !$hubcourseformdata->{$fieldname}) {
+      $DB->delete_records('block_hubcourse_metavalues', ['hubcourseid' => $hubcourseformdata->id, 'fieldid' => $metadatafield->id]);
+      continue;
+    }
+
+    $metadatavalue = $DB->get_record('block_hubcourse_metavalues', ['hubcourseid' => $hubcourseformdata->id, 'fieldid' => $metadatafield->id]);
+    if ($metadatavalue) {
+      $metadatavalue->value = $hubcourseformdata->{$fieldname};
+      $DB->update_record('block_hubcourse_metavalues', $metadatavalue);
+    } else {
+      $metadatavalue = new stdClass();
+      $metadatavalue->id = 0;
+      $metadatavalue->hubcourseid = $hubcourseformdata->id;
+      $metadatavalue->fieldid = $metadatafield->id;
+      $metadatavalue->value = $hubcourseformdata->{$fieldname};
+      $DB->insert_record('block_hubcourse_metavalues', $metadatavalue);
+    }
+  }
+  $DB->execute(
+    'DELETE FROM {block_hubcourse_metavalues} WHERE hubcourseid = ? AND fieldid NOT IN (' . implode(',', $fieldidsbindings) . ')'
+  , $params);
+}

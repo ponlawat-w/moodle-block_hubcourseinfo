@@ -88,33 +88,87 @@ function xmldb_block_hubcourseinfo_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2018121204, 'hubcourseinfo');
     }
 
-    if ($oldversion < 2021020600) {
-        $table = new xmldb_table('block_hubcourses');
-        $fields = [
-            new xmldb_field('leadauthor_roman', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'description'),
-            new xmldb_field('leadauthor_jp', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_roman'),
-            new xmldb_field('leadauthor_email', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_jp'),
-            new xmldb_field('leadauthor_aff_roman', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_email'),
-            new xmldb_field('leadauthor_aff_jp', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_aff_roman'),
-            new xmldb_field('coauthor_roman', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'leadauthor_aff_jp'),
-            new xmldb_field('coauthor_jp', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_roman'),
-            new xmldb_field('coauthor_email', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_jp'),
-            new xmldb_field('coauthor_aff_roman', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_email'),
-            new xmldb_field('coauthor_aff_jp', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_aff_roman'),
-            new xmldb_field('author3', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'coauthor_aff_jp'),
-            new xmldb_field('author4', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'author3'),
-            new xmldb_field('author5', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'author4'),
-            new xmldb_field('author_etc', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'author5'),
-            new xmldb_field('keywords', XMLDB_TYPE_CHAR, '100', false, XMLDB_NOTNULL, false, '', 'author_etc')
-        ];
+    if ($oldversion < 2021041500) {
+      $table = new xmldb_table('block_hubcourse_metafields');
+      
+      if (!$dbmanager->table_exists($table)) {
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '11', null, true, true, null, null);
+        $table->add_field('name', XMLDB_TYPE_CHAR, '300', null, true, null, null, 'id');
+        $table->add_field('type', XMLDB_TYPE_CHAR, '10', null, true, null, 'text', 'name');
+        $table->add_field('required', XMLDB_TYPE_INTEGER, '1', null, true, null, null, 'type');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $dbmanager->create_table($table);
+      }
 
-        foreach ($fields as $field) {
-            if (!$dbmanager->field_exists($table, $field)) {
-                $dbmanager->add_field($table, $field);
+      $table = new xmldb_table('block_hubcourse_metavalues');
+
+      if (!$dbmanager->table_exists($table)) {
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '11', null, true, true, null, null);
+        $table->add_field('hubcourseid', XMLDB_TYPE_INTEGER, '11', 'null', true, null, null, 'id');
+        $table->add_field('fieldid', XMLDB_TYPE_INTEGER, '11', null, true, null, null, 'fieldid');
+        $table->add_field('value', XMLDB_TYPE_TEXT, null, null, true, null, null, 'hubcourseid');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('fieldid_idx', XMLDB_INDEX_NOTUNIQUE, ['fieldid']);
+        $table->add_index('hubcourseid_idx', XMLDB_INDEX_NOTUNIQUE, ['hubcourseid']);
+        $dbmanager->create_table($table);
+      }
+
+      // For merging from branch `maj-extrafields`
+      $majextrafields = [
+        ['field' => 'leadauthor_roman', 'name' => 'Lead Author Name (Roman)', 'required' => 1],
+        ['field' => 'leadauthor_jp', 'name' => 'Lead Author Name (Japanese)', 'required' => 1],
+        ['field' => 'leadauthor_email', 'name' => 'Lead Author E-mail', 'required' => 1],
+        ['field' => 'leadauthor_aff_roman', 'name' => 'Lead Author Affiliation (Roman)', 'required' => 0],
+        ['field' => 'leadauthor_aff_jp', 'name' => 'Lead Author Affiliation (Japanese)', 'required' => 0],
+        ['field' => 'coauthor_roman', 'name' => 'Co-Author Name (Roman)', 'required' => 0],
+        ['field' => 'coauthor_jp', 'name' => 'Co-Author Name (Japanese)', 'required' => 0],
+        ['field' => 'coauthor_email', 'name' => 'Co-Author E-mail', 'required' => 0],
+        ['field' => 'coauthor_aff_roman', 'name' => 'Co-Author Affiliation (Roman)', 'required' => 0],
+        ['field' => 'coauthor_aff_jp', 'name' => 'Co-Author Affiliation (Japanese)', 'required' => 0],
+        ['field' => 'author3', 'name' => 'Third Co-Author', 'required' => 0],
+        ['field' => 'author4', 'name' => 'Fourth Co-Author', 'required' => 0],
+        ['field' => 'author5', 'name' => 'Fifth Co-Author', 'required' => 0],
+        ['field' => 'author_etc', 'name' => 'Other Contributors', 'required' => 0],
+        ['field' => 'keywords', 'name' => 'Keywords', 'required' => 0]
+      ];
+      $table = new xmldb_table('block_hubcourses');
+      foreach ($majextrafields as $majfield) {
+        if ($dbmanager->field_exists($table, $majfield['field'])) {
+          // get data from maj extra field
+          $hubcourses = $DB->get_records_sql("SELECT * FROM {block_hubcourses} WHERE {$majfield['field']} != ?", ['']);
+          
+          $metadatafield = $DB->get_record('block_hubcourse_metafields', ['name' => $majfield['name']]);
+          if (!$metadatafield || !$metadatafield->id) {
+            $metadatafield = new stdClass();
+            $metadatafield->id = 0;
+            $metadatafield->name = $majfield['name'];
+            $metadatafield->type = 'text';
+            $metadatafield->required = $majfield['required'];
+            $metadatafield->id = $DB->insert_record('block_hubcourse_metafields', $metadatafield);
+            if (!$metadatafield->id) {
+              continue;
             }
-        }
+          }
+          
+          // if data exists, create metadata field and transfer
+          if (count($hubcourses) > 0) {
+            // transfer data
+            foreach ($hubcourses as $hubcourse) {
+              $metadatavalue = new stdClass();
+              $metadatavalue->id = 0;
+              $metadatavalue->hubcourseid = $hubcourse->id;
+              $metadatavalue->fieldid = $metadatafield->id;
+              $metadatavalue->value = $hubcourse->{$majfield['field']} ? $hubcourse->{$majfield['field']} : '';
+              $DB->insert_record('block_hubcourse_metavalues', $metadatavalue);
+            }
+          }
 
-        upgrade_block_savepoint(true, 2021020600, 'hubcourseinfo');
+          // delete field from table block_hubcourses
+          $dbmanager->drop_field($table, new xmldb_field($majfield['field']));
+        }
+      }
+
+      upgrade_block_savepoint(true, 2021041500, 'hubcourseinfo');
     }
 
     return true;

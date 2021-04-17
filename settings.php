@@ -52,4 +52,15 @@ if ($ADMIN->fulltree) {
                 ['class' => 'text-primary', 'target' => '_blank', 'style' => 'margin-left: 15px;'])
         )
     );
+
+    $settings->add(
+      new admin_setting_configempty(
+        'block_hubcourseinfo/metadatafields',
+        get_string('settings:metadatafields', 'block_hubcourseinfo'),
+        html_writer::link(
+          new moodle_url('/blocks/hubcourseinfo/admin/metadatafields.php'),
+          html_writer::tag('i', '', ['class' => 'fa fa-pencil']) . ' ' . get_string('managemetadatafieldslink', 'block_hubcourseinfo'),
+          ['class' => 'text-primary', 'target' => '_blank', 'style' => 'margin-left: 15px;'])
+      )
+    );
 }

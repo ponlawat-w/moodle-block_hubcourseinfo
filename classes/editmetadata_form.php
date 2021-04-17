@@ -23,6 +23,7 @@
  */
 
 require_once(__DIR__ . '/../../../lib/formslib.php');
+require_once(__DIR__ . '/../lib.php');
 
 /**
  * Class editmetadata_form
@@ -62,6 +63,12 @@ class editmetadata_form extends moodleform {
         $this->course = $DB->get_record('course', ['id' => $hubcourse->courseid]);
         if (!$this->course) {
             throw new Exception(get_string('hubcoursenotfound', 'block_hubcourseinfo'));
+        }
+
+        $metadatavalues = $DB->get_records('block_hubcourse_metavalues', ['hubcourseid' => $this->hubcourse->id]);
+        foreach ($metadatavalues as $metadatavalue) {
+          $fieldname = 'metadata_' . $metadatavalue->fieldid;
+          $this->hubcourse->{$fieldname} = $metadatavalue->value;
         }
 
         $this->new = $new;
@@ -128,56 +135,19 @@ class editmetadata_form extends moodleform {
         $form->setDefault('description', $this->hubcourse->description);
 
         $form->addElement('html', html_writer::start_tag('hr'));
-        
-        $form->addElement('text', 'leadauthor_roman', get_string('leadauthor_roman', 'block_hubcourseinfo'));
-        $form->setDefault('leadauthor_roman', $this->hubcourse->leadauthor_roman);
-        $form->setType('leadauthor_roman', PARAM_TEXT);
-        $form->addRule('leadauthor_roman', get_string('required'), 'required');
-        $form->addElement('text', 'leadauthor_jp', get_string('leadauthor_jp', 'block_hubcourseinfo'));
-        $form->setDefault('leadauthor_jp', $this->hubcourse->leadauthor_jp);
-        $form->setType('leadauthor_jp', PARAM_TEXT);
-        $form->addRule('leadauthor_jp', get_string('required'), 'required');
-        $form->addElement('text', 'leadauthor_email', get_string('leadauthor_email', 'block_hubcourseinfo'));
-        $form->setDefault('leadauthor_email', $this->hubcourse->leadauthor_email);
-        $form->setType('leadauthor_email', PARAM_EMAIL);
-        $form->addRule('leadauthor_email', get_string('required'), 'required');
-        $form->addElement('text', 'leadauthor_aff_roman', get_string('leadauthor_aff_roman', 'block_hubcourseinfo'));
-        $form->setDefault('leadauthor_aff_roman', $this->hubcourse->leadauthor_aff_roman);
-        $form->setType('leadauthor_aff_roman', PARAM_TEXT);
-        $form->addElement('text', 'leadauthor_aff_jp', get_string('leadauthor_aff_jp', 'block_hubcourseinfo'));
-        $form->setDefault('leadauthor_aff_jp', $this->hubcourse->leadauthor_aff_jp);
-        $form->setType('leadauthor_aff_jp', PARAM_TEXT);
-        $form->addElement('text', 'coauthor_roman', get_string('coauthor_roman', 'block_hubcourseinfo'));
-        $form->setDefault('coauthor_roman', $this->hubcourse->coauthor_roman);
-        $form->setType('coauthor_roman', PARAM_TEXT);
-        $form->addElement('text', 'coauthor_jp', get_string('coauthor_jp', 'block_hubcourseinfo'));
-        $form->setDefault('coauthor_jp', $this->hubcourse->coauthor_jp);
-        $form->setType('coauthor_jp', PARAM_TEXT);
-        $form->addElement('text', 'coauthor_email', get_string('coauthor_email', 'block_hubcourseinfo'));
-        $form->setDefault('coauthor_email', $this->hubcourse->coauthor_email);
-        $form->setType('coauthor_email', PARAM_EMAIL);
-        $form->addElement('text', 'coauthor_aff_roman', get_string('coauthor_aff_roman', 'block_hubcourseinfo'));
-        $form->setDefault('coauthor_aff_roman', $this->hubcourse->coauthor_aff_roman);
-        $form->setType('coauthor_aff_roman', PARAM_TEXT);
-        $form->addElement('text', 'coauthor_aff_jp', get_string('coauthor_aff_jp', 'block_hubcourseinfo'));
-        $form->setDefault('coauthor_aff_jp', $this->hubcourse->coauthor_aff_jp);
-        $form->setType('coauthor_aff_jp', PARAM_TEXT);
-        $form->addElement('text', 'author3', get_string('author3', 'block_hubcourseinfo'));
-        $form->setDefault('author3', $this->hubcourse->author3);
-        $form->setType('author3', PARAM_TEXT);
-        $form->addElement('text', 'author4', get_string('author4', 'block_hubcourseinfo'));
-        $form->setDefault('author4', $this->hubcourse->author4);
-        $form->setType('author4', PARAM_TEXT);
-        $form->addElement('text', 'author5', get_string('author5', 'block_hubcourseinfo'));
-        $form->setDefault('author5', $this->hubcourse->author5);
-        $form->setType('author5', PARAM_TEXT);
-        $form->addElement('text', 'author_etc', get_string('author_etc', 'block_hubcourseinfo'));
-        $form->setDefault('author_etc', $this->hubcourse->author_etc);
-        $form->setType('author_etc', PARAM_TEXT);
-        $form->addElement('html', html_writer::start_tag('hr'));
-        $form->addElement('text', 'keywords', get_string('keywords', 'block_hubcourseinfo'), ['style', 'width: 100%;']);
-        $form->setDefault('keywords', $this->hubcourse->keywords);
-        $form->setType('keywords', PARAM_TEXT);
+
+        $metadatafields = block_hubcourseinfo_getmetadatafields();
+        foreach ($metadatafields as $metadatafield) {
+          $fieldname = 'metadata_' . $metadatafield->id;
+          $form->addElement('text', $fieldname, $metadatafield->name);
+          $form->setType($fieldname, PARAM_TEXT);
+          if (isset($this->hubcourse->{$fieldname})) {
+            $form->setDefault($fieldname, $this->hubcourse->{$fieldname});
+          }
+          if ($metadatafield->required) {
+            $form->addRule($fieldname, get_string('required'), 'required');
+          }
+        }
 
         $form->addElement('hidden', 'id', $this->hubcourse->id);
         $form->setType('id', PARAM_INT);

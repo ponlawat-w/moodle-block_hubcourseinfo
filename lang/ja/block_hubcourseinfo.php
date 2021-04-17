@@ -40,6 +40,7 @@ $string['settings:autocreateinfoblock_decription'] = 'コースをアップロ�
 $string['settings:maxversionamount'] = '最大バージョン数';
 $string['settings:maxversionamount_description'] = '一コースの最大バージョンの数';
 $string['settings:subjects'] = 'サブジェクトを管理する';
+$string['settings:metadatafields'] = 'Manage Metadata Fields';
 
 $string['managesubjectslink'] = 'サブジェクトを管理するのに、ここに押してください。';
 $string['managesubjects'] = 'コースサブジェクト管理';
@@ -51,6 +52,16 @@ $string['editsubject'] = 'サブジェクト編集: {$a}';
 $string['deletesubjectconfirm'] = 'サブジェクトを削除しますか。';
 $string['truncateconfirm'] = 'ハブコースのデータを削除しますか。';
 $string['majimportconfirm'] = 'MAJハブからインポート';
+
+$string['managemetadatafields'] = 'Manage Metadata Fields';
+$string['managemetadatafieldslink'] = 'Click here to manage metadata fields';
+$string['metadatafields'] = 'Metadata Fields';
+$string['newfield'] = 'Add New Field';
+$string['metadatafieldname'] = 'Field name';
+$string['deletemetadatafieldconfirm'] = 'Delete Metadata Field Confirmation';
+$string['deletemetadatafieldconfirm_title'] = 'Delete metadata field confirmation: {$a}';
+$string['deletemetadatafieldconfirm_description'] = 'Are you sure you want to delete this metadata field? All the values of this field will be loss.';
+$string['editmetadatafield'] = 'Edit metadata field: {$a}';
 
 $string['deletesubjectconfirm_title'] = '削除されるサブジェクト: {$a}';
 $string['deletesubjectconfirm_description'] = 'このサブジェクトを削除しますか。削除されたサブジェクトは戻すことができません。このサブジェクトにあるコースはすべて「無サブジェクト」に移動されます。';
