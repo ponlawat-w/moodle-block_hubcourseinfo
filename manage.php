@@ -144,9 +144,11 @@ if (count($versions) < $maxversion) {
 }
 echo html_writer::tag('hr', '');
 
-echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/delete.php', ['id' => $hubcourse->id]),
+if (has_capability('block/hubcourseinfo:deletehubcourse', context_system::instance())) {
+  echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/delete.php', ['id' => $hubcourse->id]),
     html_writer::tag('i', '', ['class' => 'fa fa-trash']) . ' ' . get_string('deletehubcourse', 'block_hubcourseinfo'),
     ['class' => 'btn btn-danger']);
+}
 
 $cap_importfrommajhub = has_capability('block/hubcourseinfo:importfrommajhub', context_system::instance()) && block_hubcourseinfo_uploadblockenabled();
 $cap_truncate = has_capability('block/hubcourseinfo:truncate', context_system::instance());

@@ -107,7 +107,15 @@ $capabilities = array(
         )
     ),
     'block/hubcourseinfo:managemetadatafields' => array(
-      'riskbitmask' => 0,
+      'riskbitmask' => RISK_PERSONAL,
+      'captype' => 'write',
+      'contextlevel' => CONTEXT_SYSTEM,
+      'archetypes' => array(
+        'manager' => CAP_ALLOW
+      )
+    ),
+    'block/hubcourseinfo:deletehubcourse' => array(
+      'riskbitmask' => RISK_DATALOSS,
       'captype' => 'write',
       'contextlevel' => CONTEXT_SYSTEM,
       'archetypes' => array(

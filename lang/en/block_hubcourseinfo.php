@@ -34,6 +34,8 @@ $string['hubcourseinfo:submitreview'] = 'Review course';
 $string['hubcourseinfo:downloadcourse'] = 'Download course file';
 $string['hubcourseinfo:importfrommajhub'] = 'Import data from MAJ hub';
 $string['hubcourseinfo:truncate'] = 'Truncate hubcourse data (preserve course existence)';
+$string['hubcourseinfo:managemetadatafields'] = 'Manage Metadata Fields';
+$string['hubcourseinfo:deletehubcourse'] = 'Delete Hubcourse';
 
 $string['settings:autocreateinfoblock'] = 'Create an instance when course is uploaded';
 $string['settings:autocreateinfoblock_decription'] = 'Automatically create an instance when new course is uploaded.';

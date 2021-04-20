@@ -42,6 +42,7 @@ if (!$course) {
 
 require_login($course);
 require_capability('block/hubcourseinfo:managecourse', $hubcoursecontext);
+require_capability('block/hubcourseinfo:deletehubcourse', context_system::instance());
 
 $PAGE->set_context($hubcoursecontext);
 $PAGE->set_pagelayout('standard');
