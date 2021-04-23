@@ -1039,3 +1039,36 @@ function block_hubcourseinfo_updatemetadata($hubcourseformdata) {
     'DELETE FROM {block_hubcourse_metavalues} WHERE hubcourseid = ? AND fieldid NOT IN (' . implode(',', $fieldidsbindings) . ')'
   , $params);
 }
+
+function block_hubcourseinfo_getmetadatacsvstreamheader($filename, $metadatafields) {
+  $f = fopen('php://output', 'w');
+  header('Pragma: public');
+  header('Expires: 0');
+  header('Content-Type: text/csv');
+  header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+  $fields = ['courseid', 'hubcourseid', 'fullname', 'shortname', 'subject', 'tags', 'demourl', 'description', 'timecreated'];
+  foreach ($metadatafields as $metadatafield) {
+    $fields[] = $metadatafield->name;
+  }
+
+  fputcsv($f, $fields);
+
+  return $f;
+}
+
+function block_hubcourseinfo_putmetadatacsv($f, $course, $hubcourse, $metadatafields) {
+  global $DB;
+  $rows = [$course->id, $hubcourse->id, $course->fullname, $course->shortname,
+    $hubcourse->subject, $hubcourse->tags, $hubcourse->demourl, $hubcourse->description, userdate($hubcourse->timecreated, '%Y/%m/%d %H:%M:%S')];
+  foreach ($metadatafields as $metadatafield) {
+    $metadatavalue = $DB->get_record('block_hubcourse_metavalues', ['hubcourseid' => $hubcourse->id, 'fieldid' => $metadatafield->id]);
+    $rows[] = $metadatavalue ? $metadatavalue->value : '';
+  }
+
+  fputcsv($f, $rows);
+}
+
+function block_hubcourseinfo_closemetadatacsv($f) {
+  fclose($f);
+}

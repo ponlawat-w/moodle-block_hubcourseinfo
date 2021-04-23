@@ -63,4 +63,16 @@ if ($ADMIN->fulltree) {
           ['class' => 'text-primary', 'target' => '_blank', 'style' => 'margin-left: 15px;'])
       )
     );
+
+  $settings->add(
+    new admin_setting_configempty(
+      'block_hubcourseinfo/exportmetadataall',
+      get_string('exportmetadataall', 'block_hubcourseinfo'),
+      html_writer::link(
+        new moodle_url('/blocks/hubcourseinfo/metadata/export.php'),
+        html_writer::tag('i', '', ['class' => 'fa fa-upload']) . ' ' . get_string('exportmetadataall', 'block_hubcourseinfo'),
+        ['class' => 'btn btn-success', 'style' => 'margin-left: 15px']
+      )
+    )
+  );
 }

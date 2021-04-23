@@ -125,6 +125,10 @@ echo html_writer::table($metadatatable);
 echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/metadata/edit.php', ['id' => $hubcourse->id]),
     html_writer::tag('i', '', ['class' => 'fa fa-edit']) . ' ' . get_string('editmetadata', 'block_hubcourseinfo'),
     ['class' => 'btn btn-primary']);
+echo ' ';
+echo html_writer::link(new moodle_url('/blocks/hubcourseinfo/metadata/export.php', ['id' => $hubcourse->id]),
+  html_writer::tag('i', '', ['class' => 'fa fa-upload']) . ' ' . get_string('exportmetadata', 'block_hubcourseinfo'),
+    ['class' => 'btn btn-success']);
 
 echo html_writer::tag('hr', '');
 

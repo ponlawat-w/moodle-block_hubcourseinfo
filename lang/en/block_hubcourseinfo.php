@@ -36,6 +36,7 @@ $string['hubcourseinfo:importfrommajhub'] = 'Import data from MAJ hub';
 $string['hubcourseinfo:truncate'] = 'Truncate hubcourse data (preserve course existence)';
 $string['hubcourseinfo:managemetadatafields'] = 'Manage Metadata Fields';
 $string['hubcourseinfo:deletehubcourse'] = 'Delete Hubcourse';
+$string['hubcourseinfo:exportmetadataall'] = 'Export Metadata of all courses';
 
 $string['settings:autocreateinfoblock'] = 'Create an instance when course is uploaded';
 $string['settings:autocreateinfoblock_decription'] = 'Automatically create an instance when new course is uploaded.';
@@ -124,6 +125,8 @@ $string['submitreview'] = 'Submit Review';
 $string['managehubcourse'] = 'Manage Hub Course';
 $string['metadata'] = 'Metadata';
 $string['editmetadata'] = 'Edit metadata';
+$string['exportmetadata'] = 'Export metadata';
+$string['exportmetadataall'] = 'Export metadata of all courses';
 $string['manageversion'] = 'Manage Versions';
 $string['deletehubcourse'] = 'Delete this course';
 $string['siteadmin'] = 'Site Administrator';
